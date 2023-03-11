@@ -65,6 +65,8 @@
 					by bebas
 				</TextBlock>
 			</StackPanel>
+
+			<TextBlock Grid.Column="1" Grid.Row="1">Hello!</TextBlock>
 		</Grid>
 	</Panel>
 </Window>
