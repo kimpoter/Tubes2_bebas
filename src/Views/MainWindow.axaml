@@ -3,7 +3,7 @@
         xmlns:vm="using:src.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="700"
         x:Class="src.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
@@ -12,7 +12,14 @@
 		TransparencyLevelHint="AcrylicBlur"
 		Background="Transparent"
 		ExtendClientAreaToDecorationsHint="True"
-		CanResize="False">
+		CanResize="False"
+		Width="1200" Height="700">
+
+	<Window.Styles>
+		<Style Selector="TextBlock">
+			<Setter Property="FontFamily" Value="avares://src/Assets/Kanit-LightItalic.ttf#"/>
+		</Style>
+	</Window.Styles>
 
 	<Design.DataContext>
 		<!-- This only sets the DataContext for the previewer in an IDE,
@@ -31,7 +38,7 @@
 			</ExperimentalAcrylicBorder.Material>
 		</ExperimentalAcrylicBorder>
 
-		<Grid>
+		<Grid ShowGridLines="False">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="240"/>
 				<ColumnDefinition/>
@@ -45,13 +52,19 @@
 			<WrapPanel Grid.RowSpan="2" Background="#3F3F46"/>
 
 
-			<TextBlock Grid.Column="1" FontSize="38"
-					   Margin="20"
-					   HorizontalAlignment="Left"
-					   VerticalAlignment="Center"
-					   FontFamily="avares://src/Assets/TiltPrism-Regular.ttf#">
-				Treasure Hunt Solver
-			</TextBlock>
+			<StackPanel Grid.Column="1">
+				<TextBlock FontSize="38"
+						   Margin="20 20 0 0"
+						   HorizontalAlignment="Left"
+						   VerticalAlignment="Center"
+						   FontFamily="avares://src/Assets/TiltPrism-Regular.ttf#">
+					TREASURE HUNT SOLVER
+				</TextBlock>
+				<TextBlock FontSize="15"
+						   Margin="20 0 0 20">
+					by bebas
+				</TextBlock>
+			</StackPanel>
 		</Grid>
 	</Panel>
 </Window>
