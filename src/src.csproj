@@ -10,12 +10,18 @@
   <ItemGroup>
     <None Remove="Assets\Fonts\fa.otf" />
     <None Remove="Assets\Fonts\Kanit-Regular.ttf" />
+    <None Remove="Assets\Images\logo-bebas-2.png" />
+    <None Remove="Assets\Images\logo-bebas-3.png" />
+    <None Remove="Assets\Images\logo-bebas-4.png" />
     <None Remove="Assets\Images\logo-bebas.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Assets\Fonts\fa.otf" />
     <Resource Include="Assets\Fonts\Kanit-Regular.ttf" />
+    <Resource Include="Assets\Images\logo-bebas-2.png" />
+    <Resource Include="Assets\Images\logo-bebas-3.png" />
+    <Resource Include="Assets\Images\logo-bebas-4.png" />
     <Resource Include="Assets\Images\logo-bebas.png" />
   </ItemGroup>
 
