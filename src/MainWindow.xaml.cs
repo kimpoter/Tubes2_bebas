@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
+using System.Diagnostics;
 
 namespace src
 {
@@ -84,33 +85,42 @@ namespace src
                 FileNameTxt.Text = openFileDialog.SafeFileName;
 
                 List<string> lines = File.ReadAllLines(openFileDialog.FileName).ToList();
+                List<List<string>> maps = new();
 
                 int i = 0;
                 int nodes = 1;
                 int rows = lines.Count;
                 int columns = 0;
+
                 foreach (var line in lines)
                 {
                     string[] elements = line.Split(' ');
+                    maps.Add(elements.ToList());
+
                     int j = 0;
                     columns = elements.Length;
+
                     var stpR = new StackPanel()
                     {
                         Orientation = Orientation.Horizontal,
                     };
+
                     var size = Math.Max(30, 400 / elements.Length);
                     stpR.Height = size;
                     stR.Children.Insert(i, stpR);
+
                     foreach (var element in elements)
                     {
                         var bc = new BrushConverter();
+
                         var brdr = new Border()
                         {
                             CornerRadius = new CornerRadius(0.2 * size),
-                            Width = size - 4,
-                            Height = size - 4,
+                            Width = size - 5,
+                            Height = size - 5,
                             Margin = new Thickness(2),
                         };
+
                         var lB = new Label()
                         {
                             HorizontalAlignment = HorizontalAlignment.Center,
@@ -118,6 +128,8 @@ namespace src
                             Foreground = (Brush)bc.ConvertFrom("#71717A")!,
                             FontSize = size / 2.0,
                         };
+
+                        // Check element value
                         if (element == "K")
                         {
                             lB.Content = "\uf805;";
@@ -146,6 +158,9 @@ namespace src
                 }
                 MatrixSizeTxt.Text = rows.ToString() + " X " + columns.ToString();
                 NodeCountTxt.Text = nodes.ToString() + " nodes";
+
+                Trace.WriteLine("Row: " + maps.Count);
+                Trace.WriteLine("Column: " + maps.Count);
             }
         }
 

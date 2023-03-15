@@ -252,8 +252,8 @@
                                   VerticalScrollBarVisibility="Auto"
                                   HorizontalAlignment="Center"
                                   VerticalAlignment="Top"
-                                  Width="404"
-                                  Height="404"
+                                  Width="415"
+                                  Height="415"
                                   Margin="30,10">
                         <StackPanel x:Name="stR"
                                     HorizontalAlignment="Center"
