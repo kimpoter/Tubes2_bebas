@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:src"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1000"
+        Title="MainWindow" Height="800" Width="1300"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
         MouseDown="Window_MouseDown"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <Style TargetType="Window">
@@ -19,12 +20,75 @@
         <Style TargetType="TextBlock">
             <Setter Property="FontFamily" Value="/Assets/Fonts/Kanit-Regular.ttf#Kanit"/>
         </Style>
-        <Style TargetType="RadioButton">
-            <Setter Property="Margin" Value="0,5"/>
-            <Setter Property="FontFamily" Value="/Assets/Fonts/Kanit-Regular.ttf#Kanit"/>
-        </Style>
         <Style TargetType="Button">
             <Setter Property="FontFamily" Value="/Assets/Fonts/Kanit-Regular.ttf#Kanit"/>
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="/Assets/Fonts/fa.otf#Font Awesome 6 Free Solid"/>
+        </Style>
+        <Style x:Key="BtnPrimary" TargetType="Button">
+            <Setter Property="Background" Value="#E4E4E7"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#71717A"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Width="120" Height="30"
+                                        Background="{TemplateBinding Background}"
+                                        CornerRadius="10" BorderThickness="3"
+                                        BorderBrush="#A1A1AA">
+                            <ContentPresenter VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#A1A1AA"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="RadioPrimary" TargetType="RadioButton">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontFamily" Value="/Assets/Fonts/Kanit-Regular.ttf#Kanit"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="#71717A"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <BulletDecorator Background="Transparent">
+                            <BulletDecorator.Bullet>
+                                <Grid Width="16" Height="16">
+                                    <Border x:Name="RadioOuter" Background="Transparent" 
+                                            BorderBrush="#A1A1AA" 
+                                            BorderThickness="3"
+                                            CornerRadius="8"/>
+                                    <Border x:Name="RadioMark"
+                                            Margin="4"
+                                            Background="#A1A1AA"
+                                            CornerRadius="8"
+                                            Visibility="Hidden"/>
+                                </Grid>
+                            </BulletDecorator.Bullet>
+                            <TextBlock Foreground="{TemplateBinding Foreground}"
+                                       Margin="5,0">
+                                <ContentPresenter/>
+                            </TextBlock>
+                        </BulletDecorator>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="true">
+                                <!--If item is checked, trigger the visibility of the mark and change the color of the selected bullet into a darker gray for better highlighting-->
+                                <Setter TargetName="RadioMark" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
 
@@ -139,19 +203,55 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Border CornerRadius="0,0,0,10"
+                <Border Grid.Column="0" CornerRadius="0,0,0,10"
                         Background="#FAFAFA">
                     <StackPanel VerticalAlignment="Center"
                                 HorizontalAlignment="Center">
-                        <Button Margin="0,10"
-                                Width="100">Choose File</Button>
-                        <RadioButton>BFS</RadioButton>
-                        <RadioButton>DFS</RadioButton>
-                        <RadioButton>TSP</RadioButton>
-                        <Button Margin="0,10,0,5">Visualize</Button>
-                        <Button Margin="0,5">Solve</Button>
+                        <StackPanel Orientation="Horizontal" Width="120"
+                                    HorizontalAlignment="Center">
+                            <Label x:Name="FileNameLabel"
+                                   Content="&#xe5a1;" 
+                                   Foreground="#A1A1AA"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,0,0"
+                                   FontSize="15"
+                                   FontFamily="/Assets/Fonts/fa.otf#Font Awesome 6 Free Solid"/>
+                            <TextBlock x:Name="FileNameTxt"
+                                       MaxHeight="50"
+                                       Text="No File Choosen"
+                                       VerticalAlignment="Center"
+                                       FontSize="12"
+                                       Width="95"
+                                       Foreground="#71717A"
+                                       HorizontalAlignment="Center"
+                                       TextTrimming="CharacterEllipsis"/>
+                        </StackPanel>
+
+                        <Button x:Name="ChooseFileBtn" Margin="0,10"
+                                Style="{StaticResource BtnPrimary}"
+                                Click="ChooseFileBtn_Click">Choose File</Button>
+                        <Button Margin="0,5,0,5"
+                                Style="{StaticResource BtnPrimary}">VISUALIZE</Button>
+                        <RadioButton Margin="0,5" Style="{StaticResource RadioPrimary}">BFS</RadioButton>
+                        <RadioButton Margin="0,5" Style="{StaticResource RadioPrimary}">DFS</RadioButton>
+                        <RadioButton Margin="0,5" Style="{StaticResource RadioPrimary}">TSP</RadioButton>
+                        <Button x:Name="BtnSolve" Margin="0,5"
+                                Style="{StaticResource BtnPrimary}"
+                                Click="BtnSolve_Click">Solve</Button>
                     </StackPanel>
                 </Border>
+                <StackPanel Grid.Column="1">
+                    <TextBlock x:Name="NodeCountTxt" HorizontalAlignment="Center"
+                               Margin="0,10" FontSize="20"
+                               Foreground="#71717A"/>
+                    <StackPanel x:Name="stR"
+                                Width="404"
+                                Height="404"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Margin="30,10">
+                    </StackPanel>
+                </StackPanel>
             </Grid>
         </Grid>
     </Border>
