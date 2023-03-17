@@ -21,6 +21,9 @@ namespace src
         Point? lastCenterPositionOnTarget;
         Point? lastMousePositionOnTarget;
         Point? lastDragPoint;
+
+        // Filename from user
+        string? fileName;
         public MainWindow()
         {
             InitializeComponent();
@@ -76,91 +79,13 @@ namespace src
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text File|*.txt";
+
             if (openFileDialog.ShowDialog() == true)
             {
-                stR.Children.Clear();
-                scrollViewer.HorizontalAlignment = HorizontalAlignment.Center;
-
                 FileNameLabel.Content = "\uf15b;";
                 FileNameTxt.Text = openFileDialog.SafeFileName;
 
-                List<string> lines = File.ReadAllLines(openFileDialog.FileName).ToList();
-                List<List<string>> maps = new();
-
-                int i = 0;
-                int nodes = 1;
-                int rows = lines.Count;
-                int columns = 0;
-
-                foreach (var line in lines)
-                {
-                    string[] elements = line.Split(' ');
-                    maps.Add(elements.ToList());
-
-                    int j = 0;
-                    columns = elements.Length;
-
-                    var stpR = new StackPanel()
-                    {
-                        Orientation = Orientation.Horizontal,
-                    };
-
-                    var size = Math.Max(30, 400 / elements.Length);
-                    stpR.Height = size;
-                    stR.Children.Insert(i, stpR);
-
-                    foreach (var element in elements)
-                    {
-                        var bc = new BrushConverter();
-
-                        var brdr = new Border()
-                        {
-                            CornerRadius = new CornerRadius(0.2 * size),
-                            Width = size - 5,
-                            Height = size - 5,
-                            Margin = new Thickness(2),
-                        };
-
-                        var lB = new Label()
-                        {
-                            HorizontalAlignment = HorizontalAlignment.Center,
-                            VerticalAlignment = VerticalAlignment.Center,
-                            Foreground = (Brush)bc.ConvertFrom("#71717A")!,
-                            FontSize = size / 2.0,
-                        };
-
-                        // Check element value
-                        if (element == "K")
-                        {
-                            lB.Content = "\uf805;";
-                            brdr.Background = (Brush)bc.ConvertFrom("#E4E4E7")!;
-                        }
-                        else if (element == "R")
-                        {
-                            brdr.Background = (Brush)bc.ConvertFrom("#E4E4E7")!;
-                            nodes++;
-                        }
-                        else if (element == "X")
-                        {
-                            brdr.Background = (Brush)bc.ConvertFrom("#52525b")!;
-                        }
-                        else if (element == "T")
-                        {
-                            lB.Content = "\uf3a5;";
-                            brdr.Background = (Brush)bc.ConvertFrom("#E4E4E7")!;
-                            nodes++;
-                        }
-
-                        brdr.Child = lB;
-                        stpR.Children.Add(brdr);
-                    }
-                    i++;
-                }
-                MatrixSizeTxt.Text = rows.ToString() + " X " + columns.ToString();
-                NodeCountTxt.Text = nodes.ToString() + " nodes";
-
-                Trace.WriteLine("Row: " + maps.Count);
-                Trace.WriteLine("Column: " + maps.Count);
+                this.fileName = openFileDialog.FileName;
             }
         }
 
@@ -267,6 +192,93 @@ namespace src
                     scrollViewer.ScrollToHorizontalOffset(newOffsetX);
                     scrollViewer.ScrollToVerticalOffset(newOffsetY);
                 }
+            }
+        }
+
+        private void VisualizeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (fileName != null)
+            {
+                stR.Children.Clear();
+                scrollViewer.HorizontalAlignment = HorizontalAlignment.Center;
+
+                List<string> lines = File.ReadAllLines(this.fileName).ToList();
+                List<List<string>> maps = new();
+
+                int i = 0;
+                int nodes = 1;
+                int rows = lines.Count;
+                int columns = 0;
+
+                foreach (var line in lines)
+                {
+                    string[] elements = line.Split(' ');
+                    maps.Add(elements.ToList());
+
+                    int j = 0;
+                    columns = elements.Length;
+
+                    var stpR = new StackPanel()
+                    {
+                        Orientation = Orientation.Horizontal,
+                    };
+
+                    var size = Math.Max(30, 400 / elements.Length);
+                    stpR.Height = size;
+                    stR.Children.Insert(i, stpR);
+
+                    foreach (var element in elements)
+                    {
+                        var bc = new BrushConverter();
+
+                        var brdr = new Border()
+                        {
+                            CornerRadius = new CornerRadius(0.2 * size),
+                            Width = size - 5,
+                            Height = size - 5,
+                            Margin = new Thickness(2),
+                        };
+
+                        var lB = new Label()
+                        {
+                            HorizontalAlignment = HorizontalAlignment.Center,
+                            VerticalAlignment = VerticalAlignment.Center,
+                            Foreground = (Brush)bc.ConvertFrom("#71717A")!,
+                            FontSize = size / 2.0,
+                        };
+
+                        // Check element value
+                        if (element == "K")
+                        {
+                            lB.Content = "\uf805;";
+                            brdr.Background = (Brush)bc.ConvertFrom("#E4E4E7")!;
+                        }
+                        else if (element == "R")
+                        {
+                            brdr.Background = (Brush)bc.ConvertFrom("#E4E4E7")!;
+                            nodes++;
+                        }
+                        else if (element == "X")
+                        {
+                            brdr.Background = (Brush)bc.ConvertFrom("#52525b")!;
+                        }
+                        else if (element == "T")
+                        {
+                            lB.Content = "\uf81d;";
+                            brdr.Background = (Brush)bc.ConvertFrom("#E4E4E7")!;
+                            nodes++;
+                        }
+
+                        brdr.Child = lB;
+                        stpR.Children.Add(brdr);
+                    }
+                    i++;
+                }
+                MatrixSizeTxt.Text = rows.ToString() + " X " + columns.ToString();
+                NodeCountTxt.Text = nodes.ToString() + " nodes";
+
+                Trace.WriteLine("Row: " + maps.Count);
+                Trace.WriteLine("Column: " + maps[0].Count);
             }
         }
     }
