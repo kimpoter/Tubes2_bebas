@@ -34,6 +34,9 @@ namespace src
         // Solving flag
         static bool isSolved = false;
 
+        // Error flag
+        static bool isError = false;
+
         // Converting HEX Color
         static readonly BrushConverter bc = new();
 
@@ -97,12 +100,13 @@ namespace src
         private void ChooseFileBtn_Click(object sender, RoutedEventArgs e)
         {
             VisualizeBtn.IsEnabled = false;
-            SolveBtn.IsEnabled = false;
-            isVisualized = false;
-            isSolved = false;
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text File|*.txt";
+
+            FileNameLabel.Foreground = (Brush)bc.ConvertFrom("#71717A")!;
+
+            FileNameTxt.Foreground = (Brush)bc.ConvertFrom("#71717A")!;
 
             if (openFileDialog.ShowDialog() == true)
             {
@@ -116,9 +120,7 @@ namespace src
                 if (doValidation.validateData(fileName))
                 {
                     FileNameLabel.Content = "\uf15b;";
-                    FileNameLabel.Foreground = (Brush)bc.ConvertFrom("#71717A")!;
 
-                    FileNameTxt.Foreground = (Brush)bc.ConvertFrom("#71717A")!;
                     VisualizeBtn.IsEnabled = true;
                 }
                 else
@@ -127,7 +129,14 @@ namespace src
                     FileNameLabel.Foreground = (Brush)bc.ConvertFrom("#f87171")!;
 
                     FileNameTxt.Foreground = (Brush)bc.ConvertFrom("#f87171")!;
+
+                    isError = true;
                 }
+            }
+            else
+            {
+                FileNameLabel.Content = "\ue5a1;";
+                FileNameTxt.Text = "No File Choosen";
             }
         }
 
@@ -204,7 +213,10 @@ namespace src
 
                 isSolved = false;
                 isVisualized = false;
-                VisualizeBtn.IsEnabled = true;
+                if (!isError)
+                {
+                    VisualizeBtn.IsEnabled = true;
+                }
             }
 
         }
