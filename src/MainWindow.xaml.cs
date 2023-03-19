@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Media3D;
 using System.Diagnostics;
+using System.Threading;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 
 namespace src
 {
@@ -24,6 +25,10 @@ namespace src
 
         // Filename from user
         string? fileName;
+
+        // Slider value
+        static int sliderValue = 500;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -89,9 +94,51 @@ namespace src
             }
         }
 
-        private void BtnSolve_Click(object sender, RoutedEventArgs e)
+        private async void SolveBtn_Click(object sender, RoutedEventArgs e)
         {
-            scrollViewer.HorizontalAlignment = HorizontalAlignment.Left;
+            string steps = "RDRDDDDLUUU";
+
+            int i = 0, j = 0;
+            var bc = new BrushConverter();
+
+            foreach (var step in steps)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#7dd3fc")!;
+                }, System.Windows.Threading.DispatcherPriority.Background);
+                await Task.Delay(sliderValue);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#fde047")!;
+                }, System.Windows.Threading.DispatcherPriority.Background);
+                //((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#fde047")!;
+                if (step == 'L')
+                {
+                    j--;
+                }
+                else if (step == 'R')
+                {
+                    j++;
+                }
+                else if (step == 'U')
+                {
+                    i--;
+                }
+                else if (step == 'D')
+                {
+                    i++;
+                }
+            }
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#7dd3fc")!;
+            }, System.Windows.Threading.DispatcherPriority.Background);
+            await Task.Delay(sliderValue);
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#fde047")!;
+            }, System.Windows.Threading.DispatcherPriority.Background);
         }
 
         void OnMouseMove(object sender, MouseEventArgs e)
@@ -199,6 +246,11 @@ namespace src
         {
             if (fileName != null)
             {
+                TimeSlider.Visibility = Visibility.Visible;
+
+                TimeTxt.Visibility = Visibility.Visible;
+                TimeTxt.Text = (sliderValue / (float)1000).ToString() + " s";
+
                 stR.Children.Clear();
                 scrollViewer.HorizontalAlignment = HorizontalAlignment.Center;
 
@@ -280,6 +332,13 @@ namespace src
                 Trace.WriteLine("Row: " + maps.Count);
                 Trace.WriteLine("Column: " + maps[0].Count);
             }
+        }
+
+        private void TimeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            sliderValue = (int)TimeSlider.Value;
+            if (TimeTxt != null)
+                TimeTxt.Text = (sliderValue / (float)1000).ToString() + " s";
         }
     }
 }
