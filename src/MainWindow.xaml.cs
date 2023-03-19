@@ -11,6 +11,8 @@ using System.Diagnostics;
 using System.Threading;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using src.Algorithms;
+using src.Utils;
 
 namespace src
 {
@@ -23,11 +25,23 @@ namespace src
         Point? lastMousePositionOnTarget;
         Point? lastDragPoint;
 
+        // Slider value
+        static int sliderValue = 500;
+
+        // Visualized tag
+        static bool isVisualized = false;
+
+        // Solving flag
+        static bool isSolved = false;
+
+        // Converting HEX Color
+        static readonly BrushConverter bc = new();
+
         // Filename from user
         string? fileName;
 
-        // Slider value
-        static int sliderValue = 500;
+        // Map
+        List<List<string>> maps = new();
 
         public MainWindow()
         {
@@ -82,27 +96,102 @@ namespace src
          */
         private void ChooseFileBtn_Click(object sender, RoutedEventArgs e)
         {
+            VisualizeBtn.IsEnabled = false;
+            SolveBtn.IsEnabled = false;
+            isVisualized = false;
+            isSolved = false;
+
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text File|*.txt";
 
             if (openFileDialog.ShowDialog() == true)
             {
-                FileNameLabel.Content = "\uf15b;";
+
                 FileNameTxt.Text = openFileDialog.SafeFileName;
 
-                this.fileName = openFileDialog.FileName;
+                fileName = openFileDialog.FileName;
+
+                validate doValidation = new();
+
+                if (doValidation.validateData(fileName))
+                {
+                    FileNameLabel.Content = "\uf15b;";
+                    FileNameLabel.Foreground = (Brush)bc.ConvertFrom("#71717A")!;
+
+                    FileNameTxt.Foreground = (Brush)bc.ConvertFrom("#71717A")!;
+                    VisualizeBtn.IsEnabled = true;
+                }
+                else
+                {
+                    FileNameLabel.Content = "\ue4eb;";
+                    FileNameLabel.Foreground = (Brush)bc.ConvertFrom("#f87171")!;
+
+                    FileNameTxt.Foreground = (Brush)bc.ConvertFrom("#f87171")!;
+                }
             }
         }
 
         private async void SolveBtn_Click(object sender, RoutedEventArgs e)
         {
-            string steps = "RDRDDDDLUUU";
-
-            int i = 0, j = 0;
-            var bc = new BrushConverter();
-
-            foreach (var step in steps)
+            if (isVisualized && !isSolved)
             {
+                isSolved = true;
+                VisualizeBtn.IsEnabled = false;
+                SolveBtn.IsEnabled = false;
+
+                string steps;
+
+                // Check the algorithm
+                if (BFSBtn.IsChecked == true)
+                {
+                    // do BFS
+                    bfs bfsAlgo = new bfs();
+                    steps = bfsAlgo.doBFS(maps);
+                }
+                else if (DFSBtn.IsChecked == true)
+                {
+                    // do DFS
+                    dfs dfsAlgo = new dfs();
+                    steps = dfsAlgo.doDFS(maps);
+                }
+                else
+                {
+                    // do TSP
+                    tsp tspAlgo = new tsp();
+                    steps = tspAlgo.doTSP(maps);
+                }
+
+                int i = 0, j = 0;
+
+                foreach (var step in steps)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#7dd3fc")!;
+                    }, System.Windows.Threading.DispatcherPriority.Background);
+                    await Task.Delay(sliderValue);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#fde047")!;
+                    }, System.Windows.Threading.DispatcherPriority.Background);
+                    //((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#fde047")!;
+                    if (step == 'L')
+                    {
+                        j--;
+                    }
+                    else if (step == 'R')
+                    {
+                        j++;
+                    }
+                    else if (step == 'U')
+                    {
+                        i--;
+                    }
+                    else if (step == 'D')
+                    {
+                        i++;
+                    }
+                }
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#7dd3fc")!;
@@ -112,33 +201,12 @@ namespace src
                 {
                     ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#fde047")!;
                 }, System.Windows.Threading.DispatcherPriority.Background);
-                //((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#fde047")!;
-                if (step == 'L')
-                {
-                    j--;
-                }
-                else if (step == 'R')
-                {
-                    j++;
-                }
-                else if (step == 'U')
-                {
-                    i--;
-                }
-                else if (step == 'D')
-                {
-                    i++;
-                }
+
+                isSolved = false;
+                isVisualized = false;
+                VisualizeBtn.IsEnabled = true;
             }
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#7dd3fc")!;
-            }, System.Windows.Threading.DispatcherPriority.Background);
-            await Task.Delay(sliderValue);
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#fde047")!;
-            }, System.Windows.Threading.DispatcherPriority.Background);
+
         }
 
         void OnMouseMove(object sender, MouseEventArgs e)
@@ -244,7 +312,7 @@ namespace src
 
         private void VisualizeBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (fileName != null)
+            if (fileName != null && !isSolved)
             {
                 TimeSlider.Visibility = Visibility.Visible;
 
@@ -252,10 +320,8 @@ namespace src
                 TimeTxt.Text = (sliderValue / (float)1000).ToString() + " s";
 
                 stR.Children.Clear();
-                scrollViewer.HorizontalAlignment = HorizontalAlignment.Center;
 
                 List<string> lines = File.ReadAllLines(this.fileName).ToList();
-                List<List<string>> maps = new();
 
                 int i = 0;
                 int nodes = 1;
@@ -326,11 +392,13 @@ namespace src
                     }
                     i++;
                 }
+
+                scrollViewer.HorizontalAlignment = HorizontalAlignment.Center;
                 MatrixSizeTxt.Text = rows.ToString() + " X " + columns.ToString();
                 NodeCountTxt.Text = nodes.ToString() + " nodes";
 
-                Trace.WriteLine("Row: " + maps.Count);
-                Trace.WriteLine("Column: " + maps[0].Count);
+                isVisualized = true;
+                SolveBtn.IsEnabled = true;
             }
         }
 

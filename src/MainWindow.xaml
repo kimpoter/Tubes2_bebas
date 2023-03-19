@@ -50,6 +50,10 @@
                     <Setter Property="Background" Value="#A1A1AA"/>
                     <Setter Property="Foreground" Value="White"/>
                 </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#f4f4f5"/>
+                    <Setter Property="Foreground" Value="#d4d4d8"/>
+                </Trigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="RadioPrimary" TargetType="RadioButton">
@@ -226,19 +230,20 @@
                                        HorizontalAlignment="Center"
                                        TextTrimming="CharacterEllipsis"/>
                         </StackPanel>
-
                         <Button x:Name="ChooseFileBtn" Margin="0,10"
                                 Style="{StaticResource BtnPrimary}"
                                 Click="ChooseFileBtn_Click">Choose File</Button>
                         <Button x:Name="VisualizeBtn" Margin="0,5,0,5"
                                 Style="{StaticResource BtnPrimary}"
-                                Click="VisualizeBtn_Click">VISUALIZE</Button>
-                        <RadioButton Margin="0,5" Style="{StaticResource RadioPrimary}">BFS</RadioButton>
-                        <RadioButton Margin="0,5" Style="{StaticResource RadioPrimary}">DFS</RadioButton>
-                        <RadioButton Margin="0,5" Style="{StaticResource RadioPrimary}">TSP</RadioButton>
+                                Click="VisualizeBtn_Click"
+                                IsEnabled="False">VISUALIZE</Button>
+                        <RadioButton x:Name="BFSBtn" GroupName="AlgorithmRdB" IsChecked="True" Margin="0,5" Style="{StaticResource RadioPrimary}">BFS</RadioButton>
+                        <RadioButton x:Name="DFSBtn"  GroupName="AlgorithmRdB" Margin="0,5" Style="{StaticResource RadioPrimary}">DFS</RadioButton>
+                        <RadioButton x:Name="TSPBtn" GroupName="AlgorithmRdB" Margin="0,5" Style="{StaticResource RadioPrimary}">TSP</RadioButton>
                         <Button x:Name="SolveBtn" Margin="0,5"
                                 Style="{StaticResource BtnPrimary}"
-                                Click="SolveBtn_Click">SOLVE</Button>
+                                Click="SolveBtn_Click"
+                                IsEnabled="False">SOLVE</Button>
                     </StackPanel>
                 </Border>
                 <StackPanel Grid.Column="1">
