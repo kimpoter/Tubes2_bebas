@@ -10,7 +10,7 @@ namespace src.Algorithms
     {
         public string doBFS(List<List<string>> map)
         {
-            return "RRRDDLLUU";
+            return "RRRRRRRRRRRRRRDDDDDDDDDDDDDLLLLLLLLLLLLLL";
         }
     }
 }

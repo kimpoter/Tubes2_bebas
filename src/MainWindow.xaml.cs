@@ -44,7 +44,7 @@ namespace src
         string? fileName;
 
         // Map
-        List<List<string>> maps = new();
+        List<List<string>> map = new();
 
         public MainWindow()
         {
@@ -122,6 +122,8 @@ namespace src
                     FileNameLabel.Content = "\uf15b;";
 
                     VisualizeBtn.IsEnabled = true;
+
+                    isError = false;
                 }
                 else
                 {
@@ -147,6 +149,7 @@ namespace src
                 isSolved = true;
                 VisualizeBtn.IsEnabled = false;
                 SolveBtn.IsEnabled = false;
+                StepsIcon.Visibility = Visibility.Visible;
 
                 string steps;
 
@@ -154,20 +157,20 @@ namespace src
                 if (BFSBtn.IsChecked == true)
                 {
                     // do BFS
-                    bfs bfsAlgo = new bfs();
-                    steps = bfsAlgo.doBFS(maps);
+                    bfs bfsAlgo = new();
+                    steps = bfsAlgo.doBFS(map);
                 }
                 else if (DFSBtn.IsChecked == true)
                 {
                     // do DFS
-                    dfs dfsAlgo = new dfs();
-                    steps = dfsAlgo.doDFS(maps);
+                    dfs dfsAlgo = new();
+                    steps = dfsAlgo.doDFS(map);
                 }
                 else
                 {
                     // do TSP
-                    tsp tspAlgo = new tsp();
-                    steps = tspAlgo.doTSP(maps);
+                    tsp tspAlgo = new();
+                    steps = tspAlgo.doTSP(map);
                 }
 
                 int i = 0, j = 0;
@@ -183,21 +186,50 @@ namespace src
                     {
                         ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#fde047")!;
                     }, System.Windows.Threading.DispatcherPriority.Background);
-                    //((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#fde047")!;
+
+                    var lB = new Label()
+                    {
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Foreground = (Brush)bc.ConvertFrom("#A1A1AA")!,
+                        Margin = new Thickness(1, 0, 1, 0),
+                        FontSize = 20,
+                    };
+
                     if (step == 'L')
                     {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            lB.Content = "\uf30a;";
+                            StepsStP.Children.Add(lB);
+                        }, System.Windows.Threading.DispatcherPriority.Background);
                         j--;
                     }
                     else if (step == 'R')
                     {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            lB.Content = "\uf30b;";
+                            StepsStP.Children.Add(lB);
+                        }, System.Windows.Threading.DispatcherPriority.Background);
                         j++;
                     }
                     else if (step == 'U')
                     {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            lB.Content = "\uf30c;";
+                            StepsStP.Children.Add(lB);
+                        }, System.Windows.Threading.DispatcherPriority.Background);
                         i--;
                     }
                     else if (step == 'D')
                     {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            lB.Content = "\uf309;";
+                            StepsStP.Children.Add(lB);
+                        }, System.Windows.Threading.DispatcherPriority.Background);
                         i++;
                     }
                 }
@@ -213,6 +245,8 @@ namespace src
 
                 isSolved = false;
                 isVisualized = false;
+                DetailsStP.Visibility = Visibility.Visible;
+
                 if (!isError)
                 {
                     VisualizeBtn.IsEnabled = true;
@@ -332,6 +366,9 @@ namespace src
                 TimeTxt.Text = (sliderValue / (float)1000).ToString() + " s";
 
                 stR.Children.Clear();
+                StepsStP.Children.Clear();
+                StepsIcon.Visibility = Visibility.Hidden;
+                DetailsStP.Visibility = Visibility.Hidden;
 
                 List<string> lines = File.ReadAllLines(this.fileName).ToList();
 
@@ -343,7 +380,7 @@ namespace src
                 foreach (var line in lines)
                 {
                     string[] elements = line.Split(' ');
-                    maps.Add(elements.ToList());
+                    map.Add(elements.ToList());
 
                     int j = 0;
                     columns = elements.Length;

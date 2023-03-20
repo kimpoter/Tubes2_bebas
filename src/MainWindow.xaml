@@ -94,6 +94,154 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
+
+
+        <Style x:Key="ScrollBarThumb"
+       TargetType="{x:Type Thumb}">
+            <Setter Property="SnapsToDevicePixels"
+          Value="True" />
+            <Setter Property="OverridesDefaultStyle"
+          Value="true" />
+            <Setter Property="IsTabStop"
+          Value="false" />
+            <Setter Property="Focusable"
+          Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border CornerRadius="8"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <ControlTemplate x:Key="VerticalScrollBar"
+                         TargetType="{x:Type ScrollBar}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition MaxHeight="0" />
+                    <RowDefinition Height="0.00001*" />
+                    <RowDefinition MaxHeight="0" />
+                </Grid.RowDefinitions>
+                <Border Grid.RowSpan="3"
+                        CornerRadius="8"
+                        Background="#F0F0F0" />
+                <Track x:Name="PART_Track"
+                       Grid.Row="1"
+                       IsDirectionReversed="true">
+                    <Track.Thumb>
+                        <Thumb Style="{StaticResource ScrollBarThumb}"
+                               Margin="2">
+                            <Thumb.BorderBrush>
+                                <LinearGradientBrush StartPoint="0,0"
+                                 EndPoint="1,0">
+                                    <LinearGradientBrush.GradientStops>
+                                        <GradientStopCollection>
+                                            <GradientStop Color="#D9D9D9"
+                                                          Offset="0.0" />
+                                        </GradientStopCollection>
+                                    </LinearGradientBrush.GradientStops>
+                                </LinearGradientBrush>
+                            </Thumb.BorderBrush>
+                            <Thumb.Background>
+                                <LinearGradientBrush StartPoint="0,0"
+                                 EndPoint="1,0">
+                                    <LinearGradientBrush.GradientStops>
+                                        <GradientStopCollection>
+                                            <GradientStop Color="Gray"
+                                                          Offset="0.0" />
+                                        </GradientStopCollection>
+                                    </LinearGradientBrush.GradientStops>
+                                </LinearGradientBrush>
+                            </Thumb.Background>
+                            <Thumb.Width>
+                                10
+                            </Thumb.Width>
+                        </Thumb>
+                    </Track.Thumb>
+                </Track>
+            </Grid>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="HorizontalScrollBar"
+                         TargetType="{x:Type ScrollBar}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MaxWidth="0" />
+                    <ColumnDefinition Width="0.00001*" />
+                    <ColumnDefinition MaxWidth="0" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.ColumnSpan="3"
+                        CornerRadius="8"
+                        Background="#F0F0F0" />
+                <Track x:Name="PART_Track"
+                       Grid.Column="1"
+                       IsDirectionReversed="False">
+                    <Track.Thumb>
+                        <Thumb Style="{StaticResource ScrollBarThumb}"
+                               Margin="2">
+                            <Thumb.BorderBrush>
+                                <LinearGradientBrush StartPoint="0,0"
+                                 EndPoint="1,0">
+                                    <LinearGradientBrush.GradientStops>
+                                        <GradientStopCollection>
+                                            <GradientStop Color="#D9D9D9"
+                                                          Offset="0.0" />
+                                        </GradientStopCollection>
+                                    </LinearGradientBrush.GradientStops>
+                                </LinearGradientBrush>
+                            </Thumb.BorderBrush>
+                            <Thumb.Background>
+                                <LinearGradientBrush StartPoint="0,0"
+                                                     EndPoint="0,1">
+                                    <LinearGradientBrush.GradientStops>
+                                        <GradientStopCollection>
+                                            <GradientStop Color="Gray"
+                                                          Offset="0.0" />
+                                        </GradientStopCollection>
+                                    </LinearGradientBrush.GradientStops>
+                                </LinearGradientBrush>
+                            </Thumb.Background>
+                            <Thumb.Height>
+                                10
+                            </Thumb.Height>
+                        </Thumb>
+                    </Track.Thumb>
+                </Track>
+            </Grid>
+        </ControlTemplate>
+
+        <Style x:Key="{x:Type ScrollBar}"
+               TargetType="{x:Type ScrollBar}">
+            <Setter Property="SnapsToDevicePixels"
+                    Value="True" />
+            <Setter Property="OverridesDefaultStyle"
+                    Value="true" />
+            <Style.Triggers>
+                <Trigger Property="Orientation"
+                         Value="Horizontal">
+                    <Setter Property="Width"
+                            Value="Auto" />
+                    <Setter Property="Height"
+                            Value="18" />
+                    <Setter Property="Template"
+                            Value="{StaticResource HorizontalScrollBar}" />
+                </Trigger>
+                <Trigger Property="Orientation"
+             Value="Vertical">
+                    <Setter Property="Width"
+              Value="18" />
+                    <Setter Property="Height"
+              Value="Auto" />
+                    <Setter Property="Template"
+              Value="{StaticResource VerticalScrollBar}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
     <Border BorderBrush="Black" BorderThickness="1"
@@ -255,12 +403,13 @@
                                Foreground="#71717A"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Slider x:Name="TimeSlider" Width="200" ValueChanged="TimeSlider_ValueChanged"
-                            Visibility="Hidden"
-                            Maximum="3000"
-                            TickPlacement="BottomRight"
-                            TickFrequency="100"
-                            Minimum="500"
-                            IsSnapToTickEnabled="True"/>
+                                Visibility="Hidden"
+                                Maximum="3000"
+                                TickPlacement="BottomRight"
+                                TickFrequency="100"
+                                Minimum="500"
+                                IsSnapToTickEnabled="True"
+                                Margin="0,0,0,10"/>
                         <TextBlock x:Name="TimeTxt" Margin="10,0"
                                    Width="25"
                                    Visibility="Hidden" Foreground="#71717A"/>
@@ -283,12 +432,53 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="300"/>
                         </Grid.ColumnDefinitions>
-                        <ScrollViewer x:Name="StepsScroll" Width="600" HorizontalAlignment="Left"
+                        <StackPanel VerticalAlignment="Bottom" Margin="10,0,0,25">
+                            <Label x:Name="StepsIcon"  
+                                   Content="&#xf54b;"
+                                   FontSize="20"
+                                   Foreground="#D4D4D8"
+                                   VerticalAlignment="Bottom"
+                                   Visibility="Hidden"/>
+                            <ScrollViewer x:Name="StepsScroll" Width="600" 
+                                      HorizontalAlignment="Left"
                                       HorizontalScrollBarVisibility="Auto"
                                       VerticalScrollBarVisibility="Hidden">
-                            <StackPanel x:Name="StepsStP" Orientation="Horizontal">
+                                <StackPanel x:Name="StepsStP" Orientation="Horizontal"
+                                        VerticalAlignment="Bottom"
+                                        Margin="0,5"
+                                        Height="30">
+                                </StackPanel>
+                            </ScrollViewer>
+                        </StackPanel>
+                        <StackPanel x:Name="DetailsStP"  Grid.Column="1" VerticalAlignment="Bottom"
+                                    HorizontalAlignment="Right"
+                                    Margin="0,0,40,30"
+                                    Visibility="Hidden">
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center">
+                                <Label x:Name="RuntimeIcon"
+                                       Content="&#xf2f2;"
+                                       Foreground="#A1A1AA"
+                                       FontSize="20"/>
+                                <TextBlock Text="20 ms"
+                                           VerticalAlignment="Center"
+                                           Foreground="#A1A1AA"
+                                           FontSize="20"/>
                             </StackPanel>
-                        </ScrollViewer>
+                            <TextBlock Text="999999999"
+                                       FontSize="50"
+                                       Foreground="#71717A"
+                                       Padding="0"
+                                       LineHeight="50"
+                                       LineStackingStrategy="BlockLineHeight"
+                                       />
+                            <TextBlock Text="steps"
+                                       HorizontalAlignment="Center"
+                                       FontSize="20"
+                                       Foreground="#A1A1AA"
+                                       LineHeight="15"
+                                       LineStackingStrategy="BlockLineHeight"/>
+                        </StackPanel>
                     </Grid>
                 </StackPanel>
             </Grid>

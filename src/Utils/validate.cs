@@ -28,19 +28,21 @@ namespace src.Utils
                     if (element == "K")
                     {
                         totalStart++;
+                        if (totalStart > 1)
+                        {
+                            return false;
+                        }
                     }
-
                     totalElement++;
+                }
+
+                if (totalElement < 2)
+                {
+                    return false;
                 }
 
                 i++;
             }
-
-            if (totalElement < 2 || totalStart > 1)
-            {
-                return false;
-            }
-
             return true;
         }
     }
