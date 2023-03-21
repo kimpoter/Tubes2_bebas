@@ -146,7 +146,7 @@ namespace src.Algorithms
         }
 
         private bool findPathDFSHelper(Point point, ref bool[,] state, ref List<Point> solution, ref List<Point> candidate,
-                                        ref int numberOfTreasureFound, ref int numberOfTreasureAvail)
+                                        ref int numberOfTreasureFound, ref int numberOfTreasureAvail, ref bool tsp)
         {
             bool anyTreasureFound = false;
 
@@ -170,9 +170,13 @@ namespace src.Algorithms
             {   
                 if (!isVisited(up, ref state) && !isBlock(up))
                 {
-                    bool anyTreasureFound1  = findPathDFSHelper(up, ref state, ref solution, ref candidate, ref numberOfTreasureFound, ref numberOfTreasureAvail);
+                    bool anyTreasureFound1  = findPathDFSHelper(up, ref state, ref solution, ref candidate, ref numberOfTreasureFound, ref numberOfTreasureAvail, ref tsp);
                     if (numberOfTreasureFound == numberOfTreasureAvail)
                     {
+                        if (tsp)
+                        {
+                            solution.Add(point);
+                        }
                         return true;
                     }
                     if (anyTreasureFound1)
@@ -187,13 +191,18 @@ namespace src.Algorithms
             {
                 if (!isVisited(down, ref state) && !isBlock(down))
                 {
-                    bool anyTreasureFound2 = findPathDFSHelper(down, ref state, ref solution, ref candidate, ref numberOfTreasureFound, ref numberOfTreasureAvail);
+                    bool anyTreasureFound2 = findPathDFSHelper(down, ref state, ref solution, ref candidate, ref numberOfTreasureFound, ref numberOfTreasureAvail, ref tsp);
                     if (numberOfTreasureFound == numberOfTreasureAvail)
                     {
+                        if (tsp)
+                        {
+                            solution.Add(point);
+                        }
                         return true;
                     }
                     if (anyTreasureFound2)
                     {
+
                         anyTreasureFound = true;
                         solution.Add(point);
                     }
@@ -205,9 +214,13 @@ namespace src.Algorithms
             {
                 if (!isVisited(left, ref state) && !isBlock(left))
                 {
-                    bool anyTreasureFound3 = findPathDFSHelper(left, ref state, ref solution, ref candidate, ref numberOfTreasureFound, ref numberOfTreasureAvail);
+                    bool anyTreasureFound3 = findPathDFSHelper(left, ref state, ref solution, ref candidate, ref numberOfTreasureFound, ref numberOfTreasureAvail, ref tsp);
                     if (numberOfTreasureFound == numberOfTreasureAvail)
                     {
+                        if (tsp)
+                        {
+                            solution.Add(point);
+                        }
                         return true;
                     }
                     if (anyTreasureFound3)
@@ -222,9 +235,13 @@ namespace src.Algorithms
             {
                 if (!isVisited(right, ref state) && !isBlock(right))
                 {
-                    bool anyTreasureFound4 = findPathDFSHelper(right, ref state, ref solution, ref candidate, ref numberOfTreasureFound, ref numberOfTreasureAvail);
+                    bool anyTreasureFound4 = findPathDFSHelper(right, ref state, ref solution, ref candidate, ref numberOfTreasureFound, ref numberOfTreasureAvail, ref tsp);
                     if (numberOfTreasureFound == numberOfTreasureAvail)
                     {
+                        if (tsp)
+                        {
+                            solution.Add(point);
+                        }
                         return true;
                     }
                     if (anyTreasureFound4)
@@ -234,22 +251,16 @@ namespace src.Algorithms
                     }
                 }
             }
-            // 
-            // if (anyTreasureFound)
-            // {
-            //     solution.Add(point);
-            // }
+            
             if (!anyTreasureFound)
             {
                 candidate.Clear();
             }
 
-            string s = String.Format("({0},{1}) {2}",point.Y, point.X, anyTreasureFound);
-            Console.WriteLine(s);
             return anyTreasureFound;
         }
 
-        public string findPathDFS() 
+        public string findPathDFS(bool tsp = false) 
         {
             int numberOfTreasureAvail = getNumberOfTreasure();
             if (numberOfTreasureAvail == 0) 
@@ -267,7 +278,7 @@ namespace src.Algorithms
             bool[,] state = new bool[_map.Count, _map[0].Count];
             int numberOfTreasureFound = 0;
 
-            findPathDFSHelper((Point) startPoint, ref state, ref solution, ref candidate, ref numberOfTreasureFound, ref numberOfTreasureAvail);
+            findPathDFSHelper((Point) startPoint, ref state, ref solution, ref candidate, ref numberOfTreasureFound, ref numberOfTreasureAvail, ref tsp);
             if (numberOfTreasureFound == numberOfTreasureAvail)
             {
                 
