@@ -192,8 +192,9 @@ namespace src.Algorithms
                 return result;
             }
 
-            public string findPathBFS() 
+            public string findPathBFS(bool tsp = false) 
             {
+                bool doneTsp = false;
                 int numberOfTreasureAvail = getNumberOfTreasure();
                 if (numberOfTreasureAvail == 0) {
                     return ""; // end
@@ -219,9 +220,19 @@ namespace src.Algorithms
                     if (isTreasure(currentPoint))
                     {
                         numberOfTreasureFound++;
-                        if (numberOfTreasureFound == numberOfTreasureAvail)
+                        if (numberOfTreasureFound >= numberOfTreasureAvail)
                         {
-                            return stringify(currentPath); 
+                            if (!tsp || doneTsp)
+                            {
+                                return (stringify(currentPath));
+                
+                            }
+                            else 
+                            {
+                                Point temp = (Point) startPoint;
+                                _map[temp.Y][temp.X] = TREASURE;
+                                doneTsp = true;
+                            }
                         }
                         // set the currentPoint (treasure) as regular path
                         _map[currentPoint.Y][currentPoint.X] = PATH;
