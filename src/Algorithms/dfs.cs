@@ -18,7 +18,12 @@ namespace src.Algorithms
 
         public dfsUtil(List<List<string>> map)
         {
-            this._map = map;
+            this._map = new List<List<string>>();
+            foreach(List<string> row in map)
+            {
+                List<string> tempRow = new List<string>(row);
+                _map.Add(tempRow);
+            }
         }
 
         private int getMaxX() 
@@ -104,12 +109,6 @@ namespace src.Algorithms
 
         private string stringify(List<Point> path)
         {
-            foreach (Point point in path)
-            {
-                string s = String.Format("({0},{1})",point.Y, point.X);
-                Console.WriteLine(s);
-            }
-
             if (path.Count <= 1)
             {
                 return "";
@@ -296,10 +295,10 @@ namespace src.Algorithms
 
     class dfs
     {
-        public string doDFS(List<List<string>> map)
+        public static string doDFS(List<List<string>> map, bool tsp = false)
         {
             dfsUtil pathfinder = new dfsUtil(map);
-            return pathfinder.findPathDFS();
+            return pathfinder.findPathDFS(tsp);
         }
     }
 }

@@ -19,7 +19,12 @@ namespace src.Algorithms
 
             public bfsUtil(List<List<string>> map)
             {
-                this._map = map;
+                this._map = new List<List<string>>();
+                foreach(List<string> row in map)
+                {
+                    List<string> tempRow = new List<string>(row);
+                    _map.Add(tempRow);
+                }
             }
 
             private int getMaxX() 
@@ -90,6 +95,7 @@ namespace src.Algorithms
                         }
                     }
                 }
+
                 return numberOfTreasure;
             } 
 
@@ -222,6 +228,7 @@ namespace src.Algorithms
                         numberOfTreasureFound++;
                         if (numberOfTreasureFound >= numberOfTreasureAvail)
                         {
+                            
                             if (!tsp || doneTsp)
                             {
                                 return (stringify(currentPath));
@@ -258,10 +265,10 @@ namespace src.Algorithms
             }
         };
             
-        public string doBFS(List<List<string>> map)
+        public static string doBFS(List<List<string>> map, bool tsp = false)
         {
             bfsUtil pathfinder = new bfsUtil (map);
-            return pathfinder.findPathBFS();
+            return pathfinder.findPathBFS(tsp);
         }
     }
 }
