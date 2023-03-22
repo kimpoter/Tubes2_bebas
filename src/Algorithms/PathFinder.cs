@@ -21,10 +21,20 @@ namespace src
 
         public PathFinder(List<List<string>> map, bool tsp)
         {
+            int maxRowLength = 0;
+            foreach(List<string> row in map)
+            {
+                maxRowLength = row.Count > maxRowLength ? row.Count : maxRowLength;
+            }
+
             _map = new List<List<string>>();
             foreach(List<string> row in map)
             {
                 List<string> tempRow = new List<string>(row);
+                for (int i = 0; i < maxRowLength - row.Count; i++)
+                {
+                    tempRow.Add(BLOCK);
+                }
                 _map.Add(tempRow);
             }
 
@@ -127,7 +137,7 @@ namespace src
 
         protected bool _isVisited(Point point)
         {
-            return _visited[point.Y, point.X] == true;
+                return _visited[point.Y, point.X] == true;
         }
 
         protected void _remember(Point point)
