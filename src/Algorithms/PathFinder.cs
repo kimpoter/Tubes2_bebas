@@ -61,7 +61,7 @@ namespace src
             {
                 throw new StartPointNotFoundException();
             }
-            else if (numberOfStartPoint >= 1)
+            else if (numberOfStartPoint > 1)
             {
                 throw new MultipleStartPointException(numberOfStartPoint);
             }
