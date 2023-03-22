@@ -35,7 +35,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Width="120" Height="30"
+                        <Border Width="130" Height="30"
                                         Background="{TemplateBinding Background}"
                                         CornerRadius="10" BorderThickness="3"
                                         BorderBrush="#A1A1AA">
@@ -94,7 +94,13 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
+        <Style x:Key="CheckBoxPrimary" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="#71717A"/>
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
 
 
         <Style x:Key="ScrollBarThumb"
@@ -359,7 +365,7 @@
                         Background="#FAFAFA">
                     <StackPanel VerticalAlignment="Center"
                                 HorizontalAlignment="Center">
-                        <StackPanel Orientation="Horizontal" Width="120"
+                        <StackPanel Orientation="Horizontal" Width="130"
                                     HorizontalAlignment="Center">
                             <Label x:Name="FileNameLabel"
                                    Content="&#xe5a1;" 
@@ -385,9 +391,54 @@
                                 Style="{StaticResource BtnPrimary}"
                                 Click="VisualizeBtn_Click"
                                 IsEnabled="False">VISUALIZE</Button>
-                        <RadioButton x:Name="BFSBtn" GroupName="AlgorithmRdB" IsChecked="True" Margin="0,5" Style="{StaticResource RadioPrimary}">BFS</RadioButton>
-                        <RadioButton x:Name="DFSBtn"  GroupName="AlgorithmRdB" Margin="0,5" Style="{StaticResource RadioPrimary}">DFS</RadioButton>
-                        <RadioButton x:Name="TSPBtn" GroupName="AlgorithmRdB" Margin="0,5" Style="{StaticResource RadioPrimary}">TSP</RadioButton>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+                            <RadioButton x:Name="BFSBtn" 
+                                         Content="BFS"
+                                         GroupName="AlgorithmRdB" 
+                                         IsChecked="True" 
+                                         Margin="0,5" 
+                                         Style="{StaticResource RadioPrimary}"
+                                         Click="BFSBtn_Click"/>
+                            <StackPanel x:Name="BFS_TSPWrapper"
+                                        Orientation="Horizontal">
+                                <Label FontSize="9"
+                                   Content="&#x2b;"
+                                   VerticalAlignment="Center"/>
+                                <CheckBox x:Name="BFS_TSPCheckBox"
+                                      Content="TSP"
+                                      Margin="6,0"
+                                      Style="{StaticResource CheckBoxPrimary}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+                            <RadioButton x:Name="DFSBtn" 
+                                         Content="DFS"
+                                         GroupName="AlgorithmRdB" Margin="0,5" 
+                                         Style="{StaticResource RadioPrimary}"
+                                         Click="DFSBtn_Click"/>
+                            <StackPanel x:Name="DFS_TSPWrapper"
+                                        Orientation="Horizontal"
+                                        Visibility="Hidden">
+                                <Label FontSize="9"
+                                   Content="&#x2b;"
+                                   VerticalAlignment="Center"/>
+                                <CheckBox x:Name="DFS_TSPCheckBox"
+                                      Content="TSP"
+                                      Margin="6,0"
+                                      Style="{StaticResource CheckBoxPrimary}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <Border BorderBrush="Gray"
+                                BorderThickness="1"
+                                Margin="0,10"/>
+                        <RadioButton x:Name="TSPBtn" 
+                                     Content="TSP"
+                                     GroupName="AlgorithmRdB" 
+                                     Margin="0,5" 
+                                     Style="{StaticResource RadioPrimary}"
+                                     Click="TSPBtn_Click"/>
                         <Button x:Name="SolveBtn" Margin="0,5"
                                 Style="{StaticResource BtnPrimary}"
                                 Click="SolveBtn_Click"
@@ -407,7 +458,7 @@
                                 Maximum="3000"
                                 TickPlacement="BottomRight"
                                 TickFrequency="100"
-                                Minimum="500"
+                                Minimum="100"
                                 IsSnapToTickEnabled="True"
                                 Margin="0,0,0,10"/>
                         <TextBlock x:Name="TimeTxt" Margin="10,0"
@@ -460,12 +511,14 @@
                                        Content="&#xf2f2;"
                                        Foreground="#A1A1AA"
                                        FontSize="20"/>
-                                <TextBlock Text="20 ms"
+                                <TextBlock x:Name="RuntimeTxt"
                                            VerticalAlignment="Center"
                                            Foreground="#A1A1AA"
                                            FontSize="20"/>
                             </StackPanel>
-                            <TextBlock Text="999999999"
+                            <TextBlock x:Name="StepsCountTxt" 
+                                       HorizontalAlignment="Center"
+                                       TextAlignment="Center"
                                        FontSize="50"
                                        Foreground="#71717A"
                                        Padding="0"

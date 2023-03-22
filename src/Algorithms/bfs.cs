@@ -272,14 +272,6 @@ namespace src.Algorithms
 
         public static string doBFS(List<List<string>> map, bool tsp = false)
         {
-            foreach (var row in map)
-            {
-                foreach (var col in row)
-                {
-                    Trace.Write(col);
-                }
-                Trace.Write('\n');
-            }
             bfsUtil pathfinder = new bfsUtil(map);
             return pathfinder.findPathBFS(tsp);
         }

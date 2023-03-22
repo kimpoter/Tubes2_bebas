@@ -16,9 +16,6 @@ using src.Utils;
 
 namespace src
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         Point? lastCenterPositionOnTarget;
@@ -42,6 +39,12 @@ namespace src
 
         // Filename from user
         string? fileName;
+
+        // Available aa for ARGB color
+        static List<string> aa = new() { "20", "42", "64", "90", "a2", "c4", "e6", "ff" };
+
+        // Count visited node
+        static List<List<int>> countVisitedNode = new();
 
         // Map
         List<List<string>> map = new();
@@ -153,26 +156,57 @@ namespace src
 
                 string steps;
 
+                // Execution time
+                Stopwatch stopwatch = new();
+
                 // Check the algorithm
                 if (BFSBtn.IsChecked == true)
                 {
                     // do BFS
-                    steps = bfs.doBFS(map, false);
+                    if (BFS_TSPCheckBox.IsChecked == true)
+                    {
+                        stopwatch.Start();
+                        steps = bfs.doBFS(map, true);
+                        stopwatch.Stop();
+                    }
+                    else
+                    {
+                        stopwatch.Start();
+                        steps = bfs.doBFS(map, false);
+                        stopwatch.Stop();
+                    }
                 }
                 else if (DFSBtn.IsChecked == true)
                 {
                     // do DFS
-                    steps = dfs.doDFS(map, false);
+                    if (DFS_TSPCheckBox.IsChecked == true)
+                    {
+                        stopwatch.Start();
+                        steps = dfs.doDFS(map, true);
+                        stopwatch.Stop();
+                    }
+                    else
+                    {
+                        stopwatch.Start();
+                        steps = dfs.doDFS(map, false);
+                        stopwatch.Stop();
+                    }
+
                 }
                 else
                 {
                     // do TSP
                     Algorithms.TravellingSalesman tspAlgo = new();
+                    stopwatch.Start();
                     steps = tspAlgo.doTSP(map);
+                    stopwatch.Stop();
                 }
+
+                Trace.WriteLine(steps);
 
                 Point start = maputils.getStartPoint(map);
                 int i = (int)start.X, j = (int)start.Y;
+                Trace.WriteLine(start.ToString());
 
                 foreach (var step in steps)
                 {
@@ -180,10 +214,11 @@ namespace src
                     {
                         ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#7dd3fc")!;
                     }, System.Windows.Threading.DispatcherPriority.Background);
+                    countVisitedNode[i][j]++;
                     await Task.Delay(sliderValue);
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#fde047")!;
+                        ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#" + aa[countVisitedNode[i][j] + 1] + "fde047")!;
                     }, System.Windows.Threading.DispatcherPriority.Background);
 
                     var lB = new Label()
@@ -236,15 +271,18 @@ namespace src
                 {
                     ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#7dd3fc")!;
                 }, System.Windows.Threading.DispatcherPriority.Background);
+                countVisitedNode[i][j]++;
                 await Task.Delay(sliderValue);
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#fde047")!;
+                    ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#" + aa[countVisitedNode[i][j] + 1] + "fde047")!;
                 }, System.Windows.Threading.DispatcherPriority.Background);
 
                 isSolved = false;
                 isVisualized = false;
                 DetailsStP.Visibility = Visibility.Visible;
+                RuntimeTxt.Text = stopwatch.ElapsedMilliseconds.ToString() + " ms";
+                StepsCountTxt.Text = steps.Length.ToString();
 
                 if (!isError)
                 {
@@ -359,6 +397,8 @@ namespace src
         {
             if (fileName != null && !isSolved)
             {
+                countVisitedNode.Clear();
+
                 TimeSlider.Visibility = Visibility.Visible;
 
                 TimeTxt.Visibility = Visibility.Visible;
@@ -376,10 +416,14 @@ namespace src
                 int rows = lines.Count;
                 int columns = 0;
 
+                map.Clear();
+
                 foreach (var line in lines)
                 {
                     string[] elements = line.Trim().Split(' ');
                     map.Add(elements.ToList());
+
+                    List<int> tempRowCountVisitedNode = new();
 
                     int j = 0;
                     columns = elements.Length;
@@ -395,7 +439,7 @@ namespace src
 
                     foreach (var element in elements)
                     {
-                        var bc = new BrushConverter();
+                        tempRowCountVisitedNode.Add(0);
 
                         var brdr = new Border()
                         {
@@ -438,6 +482,7 @@ namespace src
                         brdr.Child = lB;
                         stpR.Children.Add(brdr);
                     }
+                    countVisitedNode.Add(tempRowCountVisitedNode);
                     i++;
                 }
 
@@ -455,6 +500,30 @@ namespace src
             sliderValue = (int)TimeSlider.Value;
             if (TimeTxt != null)
                 TimeTxt.Text = (sliderValue / (float)1000).ToString() + " s";
+        }
+
+        private void BFSBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (BFSBtn.IsChecked == true)
+            {
+                BFS_TSPWrapper.Visibility = Visibility.Visible;
+                DFS_TSPWrapper.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void DFSBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (DFSBtn.IsChecked == true)
+            {
+                DFS_TSPWrapper.Visibility = Visibility.Visible;
+                BFS_TSPWrapper.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void TSPBtn_Click(object sender, RoutedEventArgs e)
+        {
+            DFS_TSPWrapper.Visibility = Visibility.Hidden;
+            BFS_TSPWrapper.Visibility = Visibility.Hidden;
         }
     }
 }
