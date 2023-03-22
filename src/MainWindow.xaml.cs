@@ -167,7 +167,7 @@ namespace src
                 else
                 {
                     // do TSP
-                    tsp tspAlgo = new();
+                    Algorithms.TravellingSalesman tspAlgo = new();
                     steps = tspAlgo.doTSP(map);
                 }
 
