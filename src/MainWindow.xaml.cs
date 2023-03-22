@@ -157,14 +157,12 @@ namespace src
                 if (BFSBtn.IsChecked == true)
                 {
                     // do BFS
-                    bfs bfsAlgo = new();
-                    steps = bfsAlgo.doBFS(map);
+                    steps = bfs.doBFS(map, false);
                 }
                 else if (DFSBtn.IsChecked == true)
                 {
                     // do DFS
-                    dfs dfsAlgo = new();
-                    steps = dfsAlgo.doDFS(map);
+                    steps = dfs.doDFS(map, false);
                 }
                 else
                 {
@@ -173,7 +171,8 @@ namespace src
                     steps = tspAlgo.doTSP(map);
                 }
 
-                int i = 0, j = 0;
+                Point start = maputils.getStartPoint(map);
+                int i = (int)start.X, j = (int)start.Y;
 
                 foreach (var step in steps)
                 {
@@ -379,7 +378,7 @@ namespace src
 
                 foreach (var line in lines)
                 {
-                    string[] elements = line.Split(' ');
+                    string[] elements = line.Trim().Split(' ');
                     map.Add(elements.ToList());
 
                     int j = 0;
@@ -390,7 +389,7 @@ namespace src
                         Orientation = Orientation.Horizontal,
                     };
 
-                    var size = Math.Max(30, 400 / elements.Length);
+                    var size = Math.Max(30, 400 / Math.Max(elements.Length, lines.Count));
                     stpR.Height = size;
                     stR.Children.Insert(i, stpR);
 

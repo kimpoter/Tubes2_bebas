@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Diagnostics;
 
 namespace src.Utils
 {
@@ -11,11 +12,11 @@ namespace src.Utils
             List<string> lines = File.ReadAllLines(fileName).ToList();
 
             int i = 0;
-            int totalElement = 0, totalStart = 0;
+            int totalElement = 0, totalStart = 0, totalTreasures = 0;
 
             foreach (var line in lines)
             {
-                string[] elements = line.Split(' ');
+                string[] elements = line.Trim().Split(' ');
 
                 int j = 0;
                 foreach (var element in elements)
@@ -33,15 +34,18 @@ namespace src.Utils
                             return false;
                         }
                     }
+                    if (element == "T")
+                    {
+                        totalTreasures++;
+                    }
                     totalElement++;
                 }
-
-                if (totalElement < 2)
-                {
-                    return false;
-                }
-
                 i++;
+            }
+
+            if (totalStart < 1 || totalElement < 2 || totalTreasures < 1)
+            {
+                return false;
             }
             return true;
         }
