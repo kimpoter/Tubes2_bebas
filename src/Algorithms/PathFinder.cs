@@ -12,6 +12,7 @@ namespace src
         protected readonly int _numberOfTreasureAvail;
         protected readonly Point _startPoint;
         protected readonly bool _tsp;
+        protected List<Point> _trace;
         
         protected const string TREASURE = "T";
         protected const string PATH = "R";
@@ -77,6 +78,8 @@ namespace src
             }
 
             _tsp = tsp;
+
+            _trace = new List<Point>();
         }
 
         protected int _getMaxX() 
@@ -183,6 +186,46 @@ namespace src
                 else 
                 {
                     result += "D";
+                    continue;
+                }
+            }
+            return result;
+        }
+
+        protected List<string> _stringifyTrace()
+        {
+            List<string> result = new List<string>();
+            if (_trace.Count <= 1)
+            {
+                return result;
+            }
+
+            for (int i = 1; i < _trace.Count; i++)
+            {   
+                if (_trace[i].X > _trace[i - 1].X && _trace[i].Y == _trace[i - 1].Y)
+                {
+                    result.Add("R");
+                    continue;
+                }
+                else if (_trace[i].X < _trace[i - 1].X && _trace[i].Y == _trace[i - 1].Y)
+                {
+                    result.Add("L");
+                    continue;
+                }
+                else if (_trace[i].Y < _trace[i - 1].Y && _trace[i].X == _trace[i - 1].X)
+                {
+                    result.Add("U");
+                    continue;
+                }
+                else if (_trace[i].Y > _trace[i - 1].Y && _trace[i].X == _trace[i - 1].X)
+                {
+                    result.Add("D");
+                    continue;
+                }
+                else 
+                {
+                    result.Add("T");
+                    result.Add(String.Format("{0},{1}", _trace[i].X, _trace[i].Y));
                     continue;
                 }
             }

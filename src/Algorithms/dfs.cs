@@ -19,6 +19,8 @@ namespace src.Algorithms
             {
                 bool anyTreasureFound = false;
 
+                _trace.Add(point);
+
                 _remember(point);
                 _solution.Add(point);
 
@@ -68,11 +70,11 @@ namespace src.Algorithms
                 return anyTreasureFound;
             }
 
-            public string findPathDFS(bool tsp = false) 
+            public (List<string>, string) findPathDFS(bool tsp = false) 
             {
                 if (_numberOfTreasureAvail == 0) 
                 {
-                    return "";
+                    return (new List<string>(), "");
                 }
 
                 int numberOfTreasureFound = 0;
@@ -82,12 +84,12 @@ namespace src.Algorithms
 
                 if (numberOfTreasureFound == _numberOfTreasureAvail)
                 {
-                    return _stringify(_solution);
+                    return (_stringifyTrace() ,_stringify(_solution));
                 }
                 else 
                 {
-                    return "";
-                    throw new SolutionNotFoundExeption();    
+                    return (_stringifyTrace(), "");
+                    // throw new SolutionNotFoundExeption();    
                 }
                 
 
@@ -97,7 +99,7 @@ namespace src.Algorithms
             
         };
 
-        public static string doDFS(List<List<string>> map, bool tsp = false)
+        public static (List<string>, string) doDFS(List<List<string>> map, bool tsp = false)
         {
             DFSUtil pathfinder = new DFSUtil(map, tsp);
             return pathfinder.findPathDFS();

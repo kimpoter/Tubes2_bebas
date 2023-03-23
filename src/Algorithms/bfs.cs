@@ -34,12 +34,12 @@ namespace src.Algorithms
                 }
             }
 
-            public string findPathBFS(bool tsp = false) 
+            public (List<string>, string) findPathBFS(bool tsp = false) 
             {
                 bool doneTsp = false;
 
                 if (_numberOfTreasureAvail == 0) {
-                    return ""; // end
+                    return (new List<string>(), ""); // end
                 }
 
                 Queue<List<Point>> queue = new Queue<List<Point>>();
@@ -51,6 +51,9 @@ namespace src.Algorithms
                 {
                     List<Point> currentPath = queue.Dequeue();
                     Point currentPoint = currentPath[^1];
+                    
+                    _trace.Add(currentPoint);
+
                     if (_isTreasure(currentPoint))
                     {
                         numberOfTreasureFound++;
@@ -58,7 +61,7 @@ namespace src.Algorithms
                         {
                             if (!tsp || doneTsp)
                             {
-                                return (_stringify(currentPath));
+                                return (_stringifyTrace(), _stringify(currentPath));
                 
                             }
                             else 
@@ -79,7 +82,7 @@ namespace src.Algorithms
             }
         };
 
-        public static string doBFS(List<List<string>> map, bool tsp = false)
+        public static (List<string>, string) doBFS(List<List<string>> map, bool tsp = false)
         {
             BFSUtil pathfinder = new BFSUtil(map, tsp);
             return pathfinder.findPathBFS(tsp);
