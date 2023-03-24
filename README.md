@@ -37,7 +37,12 @@ The features below are 100% done and implemented.
 - Visual steps taken by the algorithm chosen
 
 ## Requirements
+If you want to recompile your code, make sure the following program has been installed:
 - .NET Framework
+- .NET Desktop Development
+- Visual Studio (optional)
+
+Otherwise, you can just run the application described in the step below.
 
 ## Setup
 Make sure all requirements are installed in your local machine beforehand. Then, clone this repository.
