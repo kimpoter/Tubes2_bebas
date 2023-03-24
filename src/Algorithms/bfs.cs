@@ -29,7 +29,7 @@ namespace src.Algorithms
                         List<Point> temp = new List<Point>(currentPath);
                         temp.Add(next);
                         queue.Enqueue(temp);
-                        _remember(point);
+                        _remember(next);
                     }  
                 }
             }
