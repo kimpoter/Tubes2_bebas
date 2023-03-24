@@ -13,6 +13,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using src.Algorithms;
 using src.Utils;
+using System.Configuration;
 
 namespace src
 {
@@ -39,9 +40,6 @@ namespace src
 
         // Filename from user
         string? fileName;
-
-        // Available aa for ARGB color
-        static List<string> aa = new() { "20", "42", "64", "90", "a2", "c4", "e6", "ff" };
 
         // Count how many every nodes visited
         static List<List<int>> searchCountVisitedNode = new();
@@ -146,6 +144,11 @@ namespace src
             }
         }
 
+        /**
+         * 
+         * Show the visualization of finding all the treasures
+         * 
+         */
         private async void SolveBtn_Click(object sender, RoutedEventArgs e)
         {
             if (isVisualized && !isSolved)
@@ -196,15 +199,6 @@ namespace src
                 }
 
                 //
-                foreach (string item in searchSteps)
-                {
-                    Trace.Write(item + " ");
-                }
-                Trace.WriteLine("");
-                Trace.WriteLine(finalSteps);
-
-
-                //
                 Point start = maputils.getStartPoint(map);
                 int i = (int)start.X, j = (int)start.Y;
 
@@ -215,12 +209,15 @@ namespace src
                 int maxSearchVisitedNodes = maputils.countVisitedNodes(searchSteps, i, j, map.Count, map[0].Count);
                 int maxFinalVisitedNodes = maputils.countVisitedNodes(maputils.convertStringToList(finalSteps), i, j, map.Count, map[0].Count);
 
-                Trace.WriteLine(maxFinalVisitedNodes + " " + finalSteps.Split("").ToList().Count());
-
 
                 //
                 foreach (string step in searchSteps)
                 {
+                    if (step != "T" && step != "R" && step != "L" && step != "U" && step != "D")
+                    {
+                        curPos++;
+                        continue;
+                    }
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#7dd3fc")!;
@@ -234,7 +231,7 @@ namespace src
 
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        byte aValue = (byte)(int)(searchCountVisitedNode[i][j] / (float)maxSearchVisitedNodes * 100);
+                        byte aValue = (byte)(int)(searchCountVisitedNode[i][j] / (float)maxSearchVisitedNodes * 255);
                         ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = new SolidColorBrush(Color.FromArgb(aValue, 254, 202, 202));
                     }, System.Windows.Threading.DispatcherPriority.Background);
 
@@ -263,28 +260,42 @@ namespace src
                     curPos++;
                 }
 
-                Application.Current.Dispatcher.Invoke(() =>
+                // 
+                if (searchSteps.Count > 0)
                 {
-                    ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#7dd3fc")!;
-                }, System.Windows.Threading.DispatcherPriority.Background);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#7dd3fc")!;
+                    }, System.Windows.Threading.DispatcherPriority.Background);
 
-                //
-                await Task.Delay(sliderValue);
+                    //
+                    await Task.Delay(sliderValue);
 
-                //
-                searchCountVisitedNode[i][j]++;
+                    //
+                    searchCountVisitedNode[i][j]++;
 
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    byte aValue = (byte)(int)(searchCountVisitedNode[i][j] / (float)maxSearchVisitedNodes * 100);
-                    ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = new SolidColorBrush(Color.FromArgb(aValue, 254, 202, 202));
-                }, System.Windows.Threading.DispatcherPriority.Background);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        byte aValue = (byte)(int)(searchCountVisitedNode[i][j] / (float)maxSearchVisitedNodes * 255);
+                        ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = new SolidColorBrush(Color.FromArgb(aValue, 254, 202, 202));
+                    }, System.Windows.Threading.DispatcherPriority.Background);
+                }
+
 
                 // 
+                if (finalSteps.Length == 0)
+                {
+                    WarningBox.Visibility = Visibility.Visible;
+                    isSolved = false;
+                    isVisualized = false;
+                    return;
+                }
+
+                // Reset the start point
                 i = (int)start.X;
                 j = (int)start.Y;
 
-                foreach (var step in finalSteps)
+                foreach (char step in finalSteps)
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
@@ -299,8 +310,7 @@ namespace src
 
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        byte aValue = (byte)(int)(finalCountVisitedNode[i][j] / (float)maxFinalVisitedNodes * 100);
-                        Trace.WriteLine(finalCountVisitedNode[i][j] + " - " + maxFinalVisitedNodes);
+                        byte aValue = (byte)(int)(finalCountVisitedNode[i][j] / (float)maxFinalVisitedNodes * 255);
                         ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = new SolidColorBrush(Color.FromArgb(aValue, 253, 224, 71));
                     }, System.Windows.Threading.DispatcherPriority.Background);
 
@@ -313,6 +323,7 @@ namespace src
                         FontSize = 20,
                     };
 
+                    // Check the step
                     if (step == 'L')
                     {
                         Application.Current.Dispatcher.Invoke(() =>
@@ -363,7 +374,7 @@ namespace src
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    byte aValue = (byte)(int)(finalCountVisitedNode[i][j] / (float)maxFinalVisitedNodes * 100);
+                    byte aValue = (byte)(int)(finalCountVisitedNode[i][j] / (float)maxFinalVisitedNodes * 255);
                     ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = new SolidColorBrush(Color.FromArgb(aValue, 253, 224, 71));
                 }, System.Windows.Threading.DispatcherPriority.Background);
 
@@ -487,26 +498,35 @@ namespace src
             if (fileName != null && !isSolved)
             {
                 // 
+                WarningBox.Visibility = Visibility.Collapsed;
+
+                // 
                 searchCountVisitedNode.Clear();
                 finalCountVisitedNode.Clear();
 
+                // 
                 TimeSlider.Visibility = Visibility.Visible;
 
+                //
                 TimeTxt.Visibility = Visibility.Visible;
                 TimeTxt.Text = (sliderValue / (float)1000).ToString() + " s";
 
+                //
                 stR.Children.Clear();
                 StepsStP.Children.Clear();
                 StepsIcon.Visibility = Visibility.Hidden;
                 DetailsStP.Visibility = Visibility.Hidden;
 
+                //
                 List<string> lines = File.ReadAllLines(this.fileName).ToList();
 
+                //
                 int i = 0;
                 int nodes = 1;
                 int rows = lines.Count;
                 int columns = 0;
 
+                //
                 map.Clear();
 
                 foreach (var line in lines)
@@ -577,6 +597,7 @@ namespace src
                         brdr.Child = lB;
                         stpR.Children.Add(brdr);
                     }
+
                     //
                     searchCountVisitedNode.Add(tempSearchColVisitedNodes);
                     finalCountVisitedNode.Add(tempFinalColVisitedNodes);

@@ -9,36 +9,37 @@ using System.Diagnostics;
 namespace src.Algorithms
 {
     class bfs
-    {  
+    {
         class BFSUtil : PathFinder
-        {   
-            public BFSUtil(List<List<string>> map, bool tsp) : base (map, tsp)
+        {
+            public BFSUtil(List<List<string>> map, bool tsp) : base(map, tsp)
             {
             }
 
             private void enqueueNeighbour(List<Point> currentPath, ref Queue<List<Point>> queue)
-            {   
+            {
                 Point point = currentPath[^1];
-                            
-                Point[] directions = new Point[] {new Point(0, 1), new Point(0, -1), new Point(-1, 0), new Point(1, 0)};
+
+                Point[] directions = new Point[] { new Point(0, 1), new Point(0, -1), new Point(-1, 0), new Point(1, 0) };
                 foreach (var dir in directions)
                 {
                     Point next = new Point(point.X + dir.X, point.Y + dir.Y);
                     if (_isIdxValid(next) && !_isVisited(next) && !_isBlock(next))
-                    {   
+                    {
                         List<Point> temp = new List<Point>(currentPath);
                         temp.Add(next);
                         queue.Enqueue(temp);
-                        _remember(point);
-                    }  
+                        _remember(next);
+                    }
                 }
             }
 
-            public (List<string>, string) findPathBFS(bool tsp = false) 
+            public (List<string>, string) findPathBFS(bool tsp = false)
             {
                 bool doneTsp = false;
 
-                if (_numberOfTreasureAvail == 0) {
+                if (_numberOfTreasureAvail == 0)
+                {
                     return (new List<string>(), ""); // end
                 }
 
@@ -46,12 +47,13 @@ namespace src.Algorithms
                 int numberOfTreasureFound = 0;
 
                 _remember(_startPoint);
-                queue.Enqueue(new List<Point> {_startPoint});
-                while (queue.Count != 0) 
+                queue.Enqueue(new List<Point> { _startPoint });
+                while (queue.Count != 0)
                 {
                     List<Point> currentPath = queue.Dequeue();
                     Point currentPoint = currentPath[^1];
-                    
+
+
                     _trace.Add(currentPoint);
 
                     if (_isTreasure(currentPoint))
@@ -62,9 +64,9 @@ namespace src.Algorithms
                             if (!tsp || doneTsp)
                             {
                                 return (_stringifyTrace(), _stringify(currentPath));
-                
+
                             }
-                            else 
+                            else
                             {
                                 _map[_startPoint.Y][_startPoint.X] = TREASURE;
                                 doneTsp = true;

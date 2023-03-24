@@ -87,6 +87,12 @@ namespace src.Utils
                 currPos++;
             }
 
+            visitedNodes[i][j]++;
+            if (visitedNodes[i][j] > max)
+            {
+                max = visitedNodes[i][j];
+            }
+
             return max;
         }
 
@@ -97,12 +103,6 @@ namespace src.Utils
             {
                 listOfString.Add(ch.ToString());
             }
-
-            foreach (var str in listOfString)
-            {
-                Trace.Write(str + " ");
-            }
-            Trace.WriteLine("");
 
             return listOfString;
         }

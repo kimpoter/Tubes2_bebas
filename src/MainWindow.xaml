@@ -438,11 +438,29 @@
                                      GroupName="AlgorithmRdB" 
                                      Margin="0,5" 
                                      Style="{StaticResource RadioPrimary}"
-                                     Click="TSPBtn_Click"/>
+                                     Click="TSPBtn_Click"
+                                     Width="130"/>
                         <Button x:Name="SolveBtn" Margin="0,5"
                                 Style="{StaticResource BtnPrimary}"
                                 Click="SolveBtn_Click"
                                 IsEnabled="False">SOLVE</Button>
+                        <Border x:Name="WarningBox" Background="#fef9c3"
+                                CornerRadius="10"
+                                Padding="1,5"
+                                Margin="0,5"
+                                Visibility="Collapsed"
+                                >
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="&#xf071;"
+                                       Foreground="#facc15"
+                                       VerticalAlignment="Center"
+                                   />
+                                <TextBlock Text="No Solution Found!"
+                                           VerticalAlignment="Center"
+                                           Foreground="#A1A1AA"
+                                           FontSize="12"/>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
                 </Border>
                 <StackPanel Grid.Column="1">

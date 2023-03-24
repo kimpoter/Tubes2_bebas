@@ -1,6 +1,7 @@
 using System.Drawing;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace src
 {
@@ -13,7 +14,7 @@ namespace src
         protected readonly Point _startPoint;
         protected readonly bool _tsp;
         protected List<Point> _trace;
-        
+
         protected const string TREASURE = "T";
         protected const string PATH = "R";
         protected const string BLOCK = "X";
@@ -23,13 +24,13 @@ namespace src
         public PathFinder(List<List<string>> map, bool tsp)
         {
             int maxRowLength = 0;
-            foreach(List<string> row in map)
+            foreach (List<string> row in map)
             {
                 maxRowLength = row.Count > maxRowLength ? row.Count : maxRowLength;
             }
 
             _map = new List<List<string>>();
-            foreach(List<string> row in map)
+            foreach (List<string> row in map)
             {
                 List<string> tempRow = new List<string>(row);
                 for (int i = 0; i < maxRowLength - row.Count; i++)
@@ -44,17 +45,17 @@ namespace src
             _solution = new List<Point>();
 
             _numberOfTreasureAvail = 0;
-            for (int y = 0; y <= _getMaxY(); y++) 
+            for (int y = 0; y <= _getMaxY(); y++)
             {
-                for (int x = 0; x <= _getMaxX(); x++) 
+                for (int x = 0; x <= _getMaxX(); x++)
                 {
-                    if (_map[y][x] == TREASURE) 
+                    if (_map[y][x] == TREASURE)
                     {
                         _numberOfTreasureAvail++;
                     }
                 }
             }
-            
+
             int numberOfStartPoint = 0;
             for (int y = 0; y <= _getMaxY(); y++)
             {
@@ -82,35 +83,35 @@ namespace src
             _trace = new List<Point>();
         }
 
-        protected int _getMaxX() 
+        protected int _getMaxX()
         {
             return _map[0].Count - 1;
         }
 
-        protected int _getMaxY() 
+        protected int _getMaxY()
         {
             return _map.Count - 1;
         }
 
-        protected bool _isIdxValid(Point p) 
+        protected bool _isIdxValid(Point p)
         {
             bool xOutOfBound = p.X < 0 || p.X > _getMaxX();
             bool yOutOfBound = p.Y < 0 || p.Y > _getMaxY();
-            
+
             return !(xOutOfBound || yOutOfBound);
         }
 
-        protected bool _isPath(Point p) 
+        protected bool _isPath(Point p)
         {
             return this._map[p.Y][p.X] == PATH;
         }
 
-        protected bool _isTreasure(Point p) 
+        protected bool _isTreasure(Point p)
         {
             return this._map[p.Y][p.X] == TREASURE;
         }
 
-        protected bool _isBlock(Point p) 
+        protected bool _isBlock(Point p)
         {
             return this._map[p.Y][p.X] == BLOCK;
         }
@@ -120,14 +121,15 @@ namespace src
             return this._map[p.Y][p.X] == START;
         }
 
-        protected Point? _getStartPoint() {
+        protected Point? _getStartPoint()
+        {
             Point? startPoint = null;
             bool startPointFound = false;
-            for (int y = 0; y <= _getMaxY() && !startPointFound; y++) 
+            for (int y = 0; y <= _getMaxY() && !startPointFound; y++)
             {
-                for (int x = 0; x <= _getMaxX() && !startPointFound; x++) 
+                for (int x = 0; x <= _getMaxX() && !startPointFound; x++)
                 {
-                    if (_isStart(new Point(x, y))) 
+                    if (_isStart(new Point(x, y)))
                     {
                         startPoint = new Point(x, y);
                         startPointFound = true;
@@ -136,11 +138,11 @@ namespace src
             }
 
             return startPoint;
-        } 
+        }
 
         protected bool _isVisited(Point point)
         {
-                return _visited[point.Y, point.X] == true;
+            return _visited[point.Y, point.X] == true;
         }
 
         protected void _remember(Point point)
@@ -167,7 +169,7 @@ namespace src
             }
             string result = "";
             for (int i = 1; i < path.Count; i++)
-            {   
+            {
                 if (path[i].X > path[i - 1].X)
                 {
                     result += "R";
@@ -183,7 +185,7 @@ namespace src
                     result += "U";
                     continue;
                 }
-                else 
+                else
                 {
                     result += "D";
                     continue;
@@ -201,33 +203,9 @@ namespace src
             }
 
             for (int i = 1; i < _trace.Count; i++)
-            {   
-                if (_trace[i].X > _trace[i - 1].X && _trace[i].Y == _trace[i - 1].Y)
-                {
-                    result.Add("R");
-                    continue;
-                }
-                else if (_trace[i].X < _trace[i - 1].X && _trace[i].Y == _trace[i - 1].Y)
-                {
-                    result.Add("L");
-                    continue;
-                }
-                else if (_trace[i].Y < _trace[i - 1].Y && _trace[i].X == _trace[i - 1].X)
-                {
-                    result.Add("U");
-                    continue;
-                }
-                else if (_trace[i].Y > _trace[i - 1].Y && _trace[i].X == _trace[i - 1].X)
-                {
-                    result.Add("D");
-                    continue;
-                }
-                else 
-                {
-                    result.Add("T");
-                    result.Add(String.Format("{0},{1}", _trace[i].X, _trace[i].Y));
-                    continue;
-                }
+            { 
+                result.Add("T");
+                result.Add(String.Format("{0},{1}", _trace[i].X, _trace[i].Y));
             }
             return result;
         }
@@ -244,7 +222,7 @@ namespace src
     class MultipleStartPointException : Exception
     {
         private readonly int _numberOfStartPoint;
-        
+
         public MultipleStartPointException(int numberOfStartPoint) : base("multiple start point found!")
         {
             _numberOfStartPoint = numberOfStartPoint;
