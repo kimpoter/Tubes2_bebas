@@ -69,12 +69,16 @@ bin/src.exe
 ## Program Structure
 
 ```
+├── assets
+│   └── app-preview.png
 ├── bin
 │   ├── src.deps.json
 │   ├── src.dll
 │   ├── src.exe
 │   ├── src.pdb
 │   └── src.runtimeconfig.json
+├── doc
+│   └── bebas.pdf
 ├── README.md
 ├── src
 │   ├── Algorithms
@@ -88,30 +92,10 @@ bin/src.exe
 │   ├── Assets
 │   │   ├── Fonts
 │   │   │   ├── fa.otf
-│   │   │   ├── Kanit-BlackItalic.ttf
-│   │   │   ├── Kanit-Black.ttf
-│   │   │   ├── Kanit-BoldItalic.ttf
-│   │   │   ├── Kanit-Bold.ttf
-│   │   │   ├── Kanit-ExtraBoldItalic.ttf
-│   │   │   ├── Kanit-ExtraBold.ttf
-│   │   │   ├── Kanit-ExtraLightItalic.ttf
-│   │   │   ├── Kanit-ExtraLight.ttf
-│   │   │   ├── Kanit-Italic.ttf
-│   │   │   ├── Kanit-LightItalic.ttf
-│   │   │   ├── Kanit-Light.ttf
-│   │   │   ├── Kanit-MediumItalic.ttf
-│   │   │   ├── Kanit-Medium.ttf
-│   │   │   ├── Kanit-Regular.ttf
-│   │   │   ├── Kanit-SemiBoldItalic.ttf
-│   │   │   ├── Kanit-SemiBold.ttf
-│   │   │   ├── Kanit-ThinItalic.ttf
-│   │   │   ├── Kanit-Thin.ttf
-│   │   │   └── TiltPrism-Regular.ttf
-│   │   └── Images
-│   │       ├── logo-bebas-2.png
-│   │       ├── logo-bebas-3.png
-│   │       ├── logo-bebas-4.png
-│   │       └── logo-bebas.png
+│   │   │   └── Kanit-Regular.ttf
+│   │   ├── Images
+│   │   │   └── logo-bebas.png
+│   │   └── logo-bebas.ico
 │   ├── MainWindow.xaml
 │   ├── MainWindow.xaml.cs
 │   ├── obj
