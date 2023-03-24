@@ -202,22 +202,22 @@ namespace src
 
             for (int i = 1; i < _trace.Count; i++)
             {   
-                if (_trace[i].X > _trace[i - 1].X && _trace[i].Y == _trace[i - 1].Y)
+                if (_trace[i].X == _trace[i - 1].X + 1 && _trace[i].Y == _trace[i - 1].Y)
                 {
                     result.Add("R");
                     continue;
                 }
-                else if (_trace[i].X < _trace[i - 1].X && _trace[i].Y == _trace[i - 1].Y)
+                else if (_trace[i].X == _trace[i - 1].X - 1 && _trace[i].Y == _trace[i - 1].Y)
                 {
                     result.Add("L");
                     continue;
                 }
-                else if (_trace[i].Y < _trace[i - 1].Y && _trace[i].X == _trace[i - 1].X)
+                else if (_trace[i].Y == _trace[i - 1].Y - 1 && _trace[i].X == _trace[i - 1].X)
                 {
                     result.Add("U");
                     continue;
                 }
-                else if (_trace[i].Y > _trace[i - 1].Y && _trace[i].X == _trace[i - 1].X)
+                else if (_trace[i].Y == _trace[i - 1].Y + 1 && _trace[i].X == _trace[i - 1].X)
                 {
                     result.Add("D");
                     continue;
