@@ -61,11 +61,11 @@ Make sure all requirements are installed in your local machine beforehand. Then,
 git clone git@github.com:sozyGithub/Tubes2_bebas.git
 ```
 
-Change to the repository directory, then run the `bin/src.exe` file.
+Change to the repository directory, then run the `bin/treasurehuntsolver.exe` file.
 
 ```bash
 cd Tubes2_bebas/
-bin/src.exe
+bin/treasurehuntsolver.exe
 ```
 
 ## Program Structure
