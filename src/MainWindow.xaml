@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:src"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1300"
+        Title="Treasure Hunt Solver - bebas" Height="800" Width="1300"
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
         MouseDown="Window_MouseDown"
         ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Icon="/Assets/logo-bebas.ico">
 
     <Window.Resources>
         <Style TargetType="Window">
@@ -284,7 +285,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Image Grid.Column="1" Width="30" Source="/Assets/Images/logo-bebas-4.png"/>
+                        <Image Grid.Column="1" Width="30" Source="/Assets/Images/logo-bebas.png"/>
 
                         <TextBlock Grid.Column="2" 
                                    Text="Treasure Hunt Solver"
