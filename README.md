@@ -3,8 +3,6 @@
   alt="Treasure Hunt App by Bebas"
   style="display: inline-block; margin: 0 auto; width: 100%; max-width:800; padding: 0;">
 
-<p style="text-align: center" >Made with ❤️ by **bebas** team.</p>
-
 # Pengaplikasian Algoritma BFS dan DFS dalam Menyelesaikan Persoalan Maze Treasure Hunt
 
 Dalam tugas besar ini, Anda akan diminta untuk membangun sebuah aplikasi dengan GUI sederhana yang dapat mengimplementasikan BFS dan DFS untuk mendapatkan rute memperoleh seluruh treasure atau harta karun yang ada. Program dapat menerima dan membaca input sebuah file txt yang berisi maze yang akan ditemukan solusi rute mendapatkan treasure-nya. Untuk mempermudah, batasan dari input maze cukup berbentuk segi-empat dengan spesifikasi simbol sebagai berikut :
@@ -159,3 +157,5 @@ _There are no plans to change, add, or optimize the program in the near future._
 - This project is spearheaded by the IF2211 Informatics major at Institut Teknologi Bandung, which has been well organized by the IF2211 - 2023 professors and assistants.
 - README template by [@flynerdpl](https://www.flynerd.pl/): [README](https://github.com/ritaly/README-cheatsheet)
 - Thanks to the reference sources and methods as a basis that have been listed in the relevant parts of the report.
+
+Made with ❤️ by **bebas** team.
