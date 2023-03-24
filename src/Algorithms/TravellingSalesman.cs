@@ -99,6 +99,7 @@ namespace src.Algorithms
             return true;
         }
 
+        // Transform matrix to a full graph
         private List<String> transformToGraph(List<List<String>> map, Pair start)
         {
             List<String> stringPath = new List<String>( new String[this.index.Count()]);
@@ -157,6 +158,8 @@ namespace src.Algorithms
 
             return stringPath;
         }
+
+        // Generate all permutations of n integer (0...n) 
         private void generatePermutation(List<int> numbers, int size)
         {
             if (size == 1)
@@ -189,6 +192,7 @@ namespace src.Algorithms
             }
         }
 
+        // Calculate distance of numbers[i] to numbers[i+1] and back
         private int calculateDistance(List<int> numbers)
         {
             int distance = 0;
@@ -250,6 +254,7 @@ namespace src.Algorithms
                 this.stringPaths.Add(transformToGraph(map, index[i]));
             }
 
+            // Generate permutations
             this.permutation = new List<List<int>>();
 
             List<int> numbers = new List<int>();
@@ -258,6 +263,7 @@ namespace src.Algorithms
 
             generatePermutation(numbers, numbers.Count);
 
+            // Permutate, then calculate shortest distance
             int shortestIndex = 0;
             for (int i = 1; i < this.permutation.Count; i++)
             {
@@ -268,6 +274,7 @@ namespace src.Algorithms
                     shortestIndex = i;
             }
 
+            // Combine all strings of answers
             String finalPath = "";
             for (int i = 0; i < amount - 1; i++)
                 finalPath += this.stringPaths[this.permutation[shortestIndex][i]][this.permutation[shortestIndex][i+1]];
