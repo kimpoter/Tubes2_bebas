@@ -1,3 +1,5 @@
+Made with ❤️ by **bebas** team.
+
 # Pengaplikasian Algoritma BFS dan DFS dalam Menyelesaikan Persoalan Maze Treasure Hunt
 
 Dalam tugas besar ini, Anda akan diminta untuk membangun sebuah aplikasi dengan GUI sederhana yang dapat mengimplementasikan BFS dan DFS untuk mendapatkan rute memperoleh seluruh treasure atau harta karun yang ada. Program dapat menerima dan membaca input sebuah file txt yang berisi maze yang akan ditemukan solusi rute mendapatkan treasure-nya. Untuk mempermudah, batasan dari input maze cukup berbentuk segi-empat dengan spesifikasi simbol sebagai berikut : 
@@ -43,15 +45,21 @@ Make sure all requirements are installed in your local machine beforehand. Then,
 git clone git@github.com:sozyGithub/Tubes2_bebas.git
 ```
 
-Change to the repository directory, then run the `mainWindows.py` file.
+Change to the repository directory, then run the `bin/src.exe` file.
 ```bash
 cd Tubes2_bebas/
-bin/TreasureMazeHunt.exe
+bin/src.exe
 ```
 
 ## Program Structure
 
 ```
+├── bin
+│   ├── src.deps.json
+│   ├── src.dll
+│   ├── src.exe
+│   ├── src.pdb
+│   └── src.runtimeconfig.json
 ├── README.md
 ├── src
 │   ├── Algorithms
@@ -97,6 +105,10 @@ bin/TreasureMazeHunt.exe
 │   │   ├── src.csproj.nuget.dgspec.json
 │   │   ├── src.csproj.nuget.g.props
 │   │   └── src.csproj.nuget.g.targets
+│   ├── Properties
+│   │   └── PublishProfiles
+│   │       ├── FolderProfile.pubxml
+│   │       └── FolderProfile.pubxml.user
 │   ├── src.csproj
 │   ├── src.csproj.user
 │   ├── src.sln
@@ -109,7 +121,13 @@ bin/TreasureMazeHunt.exe
     ├── sampel-3.txt
     ├── sampel-4.txt
     ├── sampel-5.txt
-    └── tc_1.txt.txt
+    ├── tc_1.txt
+    ├── tc_2.txt
+    ├── tc_3.txt
+    ├── tc_4.txt
+    ├── tc_5.txt
+    ├── tc_6.txt
+    └── tc_7.txt
 ```
 
 ## Project Status
@@ -118,6 +136,8 @@ This project is *finished*.
 *There are no plans to change, add, or optimize the program in the near future.*
 
 ## Room for Improvement
+- Faster TSP implementation (with dynamic programming)
+- Stop, Rewind, and Play button available for easier viewing
 
 ## Acknowledgements
 - This project is spearheaded by the IF2211 Informatics major at Institut Teknologi Bandung, which has been well organized by the IF2211 - 2023 professors and assistants.
