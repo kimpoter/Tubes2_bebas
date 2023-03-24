@@ -1,8 +1,13 @@
-Made with ❤️ by **bebas** team.
+<img
+  src="assets/app-preview.png"
+  alt="Treasure Hunt App by Bebas"
+  style="display: inline-block; margin: 0 auto; width: 100%; max-width:800; padding: 0;">
+
+<p style="text-align: center" >Made with ❤️ by **bebas** team.</p>
 
 # Pengaplikasian Algoritma BFS dan DFS dalam Menyelesaikan Persoalan Maze Treasure Hunt
 
-Dalam tugas besar ini, Anda akan diminta untuk membangun sebuah aplikasi dengan GUI sederhana yang dapat mengimplementasikan BFS dan DFS untuk mendapatkan rute memperoleh seluruh treasure atau harta karun yang ada. Program dapat menerima dan membaca input sebuah file txt yang berisi maze yang akan ditemukan solusi rute mendapatkan treasure-nya. Untuk mempermudah, batasan dari input maze cukup berbentuk segi-empat dengan spesifikasi simbol sebagai berikut : 
+Dalam tugas besar ini, Anda akan diminta untuk membangun sebuah aplikasi dengan GUI sederhana yang dapat mengimplementasikan BFS dan DFS untuk mendapatkan rute memperoleh seluruh treasure atau harta karun yang ada. Program dapat menerima dan membaca input sebuah file txt yang berisi maze yang akan ditemukan solusi rute mendapatkan treasure-nya. Untuk mempermudah, batasan dari input maze cukup berbentuk segi-empat dengan spesifikasi simbol sebagai berikut :
 
 - K : Krusty Krab (Titik awal)
 - T : Treasure
@@ -16,13 +21,15 @@ Daftar input maze akan dikemas dalam sebuah folder yang dinamakan test dan terka
 Setelah program melakukan pembacaan input, program akan memvisualisasikan gridnya terlebih dahulu tanpa pemberian rute solusi. Hal tersebut dilakukan agar pengguna dapat mengerjakan terlebih dahulu treasure hunt secara manual jika diinginkan. Kemudian, program menyediakan tombol solve untuk mengeksekusi algoritma DFS dan BFS. Setelah tombol diklik, program akan melakukan pemberian warna pada rute solusi.
 
 ## Group Members
-| NIM      | Name                        |
-| -------- | --------------------------- |
-| 13521056 | Daniel Egiant Sitanggang    |
-| 13521092 | Frankie Huang			     |
-| 13521150 | I Putu Bakta Hari Sudewa    |
+
+| NIM      | Name                     |
+| -------- | ------------------------ |
+| 13521056 | Daniel Egiant Sitanggang |
+| 13521092 | Frankie Huang            |
+| 13521150 | I Putu Bakta Hari Sudewa |
 
 ## About this project
+
 - Solves 2D Maze Treasure Hunt problem with BFS and DFS algorithm
 - Step-by-step display of path taken by the algorithm
 - GUI display implemented with C# Desktop Application Development
@@ -30,22 +37,28 @@ Setelah program melakukan pembacaan input, program akan memvisualisasikan gridny
 - Programmed in C# using Visual Studio IDE
 
 ## Features
+
 The features below are 100% done and implemented.
+
 - BFS algorithm solution including its TSP counterpart
 - DFS algorithm solution including its TSP counterpart
 - TSP implemented with brute-force
 - Visual steps taken by the algorithm chosen
 
 ## Requirements
+
 - .NET Framework
 
 ## Setup
+
 Make sure all requirements are installed in your local machine beforehand. Then, clone this repository.
+
 ```bash
 git clone git@github.com:sozyGithub/Tubes2_bebas.git
 ```
 
 Change to the repository directory, then run the `bin/src.exe` file.
+
 ```bash
 cd Tubes2_bebas/
 bin/src.exe
@@ -131,15 +144,18 @@ bin/src.exe
 ```
 
 ## Project Status
-This project is *finished*.
 
-*There are no plans to change, add, or optimize the program in the near future.*
+This project is _finished_.
+
+_There are no plans to change, add, or optimize the program in the near future._
 
 ## Room for Improvement
+
 - Faster TSP implementation (with dynamic programming)
 - Stop, Rewind, and Play button available for easier viewing
 
 ## Acknowledgements
+
 - This project is spearheaded by the IF2211 Informatics major at Institut Teknologi Bandung, which has been well organized by the IF2211 - 2023 professors and assistants.
 - README template by [@flynerdpl](https://www.flynerd.pl/): [README](https://github.com/ritaly/README-cheatsheet)
 - Thanks to the reference sources and methods as a basis that have been listed in the relevant parts of the report.
