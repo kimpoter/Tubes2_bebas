@@ -44,7 +44,9 @@ The features below are 100% done and implemented.
 - Visual steps taken by the algorithm chosen
 
 ## Requirements
+
 If you want to recompile your code, make sure the following program has been installed:
+
 - .NET Framework
 - .NET Desktop Development
 - Visual Studio (optional)
@@ -74,7 +76,7 @@ bin/src.exe
 ├── bin
 │   ├── src.deps.json
 │   ├── src.dll
-│   ├── src.exe
+│   ├── treasurehuntsolver.exe
 │   ├── src.pdb
 │   └── src.runtimeconfig.json
 ├── doc
