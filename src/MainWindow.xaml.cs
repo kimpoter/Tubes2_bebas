@@ -43,8 +43,9 @@ namespace src
         // Available aa for ARGB color
         static List<string> aa = new() { "20", "42", "64", "90", "a2", "c4", "e6", "ff" };
 
-        // Count visited node
-        static List<List<int>> countVisitedNode = new();
+        // Count how many every nodes visited
+        static List<List<int>> searchCountVisitedNode = new();
+        static List<List<int>> finalCountVisitedNode = new();
 
         // Map
         List<List<string>> map = new();
@@ -149,12 +150,17 @@ namespace src
         {
             if (isVisualized && !isSolved)
             {
+                //
                 isSolved = true;
                 VisualizeBtn.IsEnabled = false;
                 SolveBtn.IsEnabled = false;
                 StepsIcon.Visibility = Visibility.Visible;
 
-                string steps;
+                //
+                (List<string>, string) allSteps = new();
+                List<string> searchSteps = new();
+                string finalSteps = "";
+
 
                 // Execution time
                 Stopwatch stopwatch = new();
@@ -163,62 +169,139 @@ namespace src
                 if (BFSBtn.IsChecked == true)
                 {
                     // do BFS
-                    if (BFS_TSPCheckBox.IsChecked == true)
-                    {
-                        stopwatch.Start();
-                        steps = bfs.doBFS(map, true);
-                        stopwatch.Stop();
-                    }
-                    else
-                    {
-                        stopwatch.Start();
-                        steps = bfs.doBFS(map, false);
-                        stopwatch.Stop();
-                    }
+                    stopwatch.Start();
+                    allSteps = bfs.doBFS(map, BFS_TSPCheckBox.IsChecked == true);
+                    stopwatch.Stop();
+
+                    searchSteps = allSteps.Item1;
+                    finalSteps = allSteps.Item2;
                 }
                 else if (DFSBtn.IsChecked == true)
                 {
                     // do DFS
-                    if (DFS_TSPCheckBox.IsChecked == true)
-                    {
-                        stopwatch.Start();
-                        steps = dfs.doDFS(map, true);
-                        stopwatch.Stop();
-                    }
-                    else
-                    {
-                        stopwatch.Start();
-                        steps = dfs.doDFS(map, false);
-                        stopwatch.Stop();
-                    }
+                    stopwatch.Start();
+                    allSteps = dfs.doDFS(map, DFS_TSPCheckBox.IsChecked == true);
+                    stopwatch.Stop();
 
+                    searchSteps = allSteps.Item1;
+                    finalSteps = allSteps.Item2;
                 }
                 else
                 {
                     // do TSP
-                    Algorithms.TravellingSalesman tspAlgo = new();
+                    TravellingSalesman tspAlgo = new();
                     stopwatch.Start();
-                    steps = tspAlgo.doTSP(map);
+                    finalSteps = tspAlgo.doTSP(map);
                     stopwatch.Stop();
                 }
 
-                Trace.WriteLine(steps);
+                //
+                foreach (string item in searchSteps)
+                {
+                    Trace.Write(item + " ");
+                }
+                Trace.WriteLine("");
+                Trace.WriteLine(finalSteps);
 
+
+                //
                 Point start = maputils.getStartPoint(map);
                 int i = (int)start.X, j = (int)start.Y;
-                Trace.WriteLine(start.ToString());
 
-                foreach (var step in steps)
+                //
+                int curPos = 0;
+
+                // 
+                int maxSearchVisitedNodes = maputils.countVisitedNodes(searchSteps, i, j, map.Count, map[0].Count);
+                int maxFinalVisitedNodes = maputils.countVisitedNodes(maputils.convertStringToList(finalSteps), i, j, map.Count, map[0].Count);
+
+                Trace.WriteLine(maxFinalVisitedNodes + " " + finalSteps.Split("").ToList().Count());
+
+
+                //
+                foreach (string step in searchSteps)
                 {
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#7dd3fc")!;
                     }, System.Windows.Threading.DispatcherPriority.Background);
-                    countVisitedNode[i][j]++;
+
+                    //
                     await Task.Delay(sliderValue);
+
+                    //
+                    searchCountVisitedNode[i][j]++;
+
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#" + aa[countVisitedNode[i][j] + 1] + "fde047")!;
+                        byte aValue = (byte)(int)(searchCountVisitedNode[i][j] / (float)maxSearchVisitedNodes * 100);
+                        ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = new SolidColorBrush(Color.FromArgb(aValue, 254, 202, 202));
+                    }, System.Windows.Threading.DispatcherPriority.Background);
+
+                    if (step == "L")
+                    {
+                        j--;
+                    }
+                    else if (step == "R")
+                    {
+                        j++;
+                    }
+                    else if (step == "U")
+                    {
+                        i--;
+                    }
+                    else if (step == "D")
+                    {
+                        i++;
+                    }
+                    else if (step == "T")
+                    {
+                        List<string> teleportPoint = searchSteps[curPos + 1].Split(',').ToList();
+                        j = Int32.Parse(teleportPoint[0]);
+                        i = Int32.Parse(teleportPoint[1]);
+                    }
+                    curPos++;
+                }
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#7dd3fc")!;
+                }, System.Windows.Threading.DispatcherPriority.Background);
+
+                //
+                await Task.Delay(sliderValue);
+
+                //
+                searchCountVisitedNode[i][j]++;
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    byte aValue = (byte)(int)(searchCountVisitedNode[i][j] / (float)maxSearchVisitedNodes * 100);
+                    ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = new SolidColorBrush(Color.FromArgb(aValue, 254, 202, 202));
+                }, System.Windows.Threading.DispatcherPriority.Background);
+
+                // 
+                i = (int)start.X;
+                j = (int)start.Y;
+
+                foreach (var step in finalSteps)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#7dd3fc")!;
+                    }, System.Windows.Threading.DispatcherPriority.Background);
+
+                    //
+                    await Task.Delay(sliderValue);
+
+                    //
+                    finalCountVisitedNode[i][j]++;
+
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        byte aValue = (byte)(int)(finalCountVisitedNode[i][j] / (float)maxFinalVisitedNodes * 100);
+                        Trace.WriteLine(finalCountVisitedNode[i][j] + " - " + maxFinalVisitedNodes);
+                        ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = new SolidColorBrush(Color.FromArgb(aValue, 253, 224, 71));
                     }, System.Windows.Threading.DispatcherPriority.Background);
 
                     var lB = new Label()
@@ -271,18 +354,24 @@ namespace src
                 {
                     ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#7dd3fc")!;
                 }, System.Windows.Threading.DispatcherPriority.Background);
-                countVisitedNode[i][j]++;
+
+                //
                 await Task.Delay(sliderValue);
+
+                //
+                finalCountVisitedNode[i][j]++;
+
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = (Brush)bc.ConvertFrom("#" + aa[countVisitedNode[i][j] + 1] + "fde047")!;
+                    byte aValue = (byte)(int)(finalCountVisitedNode[i][j] / (float)maxFinalVisitedNodes * 100);
+                    ((Border)((StackPanel)stR.Children[i]).Children[j]).Background = new SolidColorBrush(Color.FromArgb(aValue, 253, 224, 71));
                 }, System.Windows.Threading.DispatcherPriority.Background);
 
                 isSolved = false;
                 isVisualized = false;
                 DetailsStP.Visibility = Visibility.Visible;
                 RuntimeTxt.Text = stopwatch.ElapsedMilliseconds.ToString() + " ms";
-                StepsCountTxt.Text = steps.Length.ToString();
+                StepsCountTxt.Text = finalSteps.Length.ToString();
 
                 if (!isError)
                 {
@@ -397,7 +486,9 @@ namespace src
         {
             if (fileName != null && !isSolved)
             {
-                countVisitedNode.Clear();
+                // 
+                searchCountVisitedNode.Clear();
+                finalCountVisitedNode.Clear();
 
                 TimeSlider.Visibility = Visibility.Visible;
 
@@ -420,10 +511,12 @@ namespace src
 
                 foreach (var line in lines)
                 {
+                    // 
+                    List<int> tempSearchColVisitedNodes = new();
+                    List<int> tempFinalColVisitedNodes = new();
+
                     string[] elements = line.Trim().Split(' ');
                     map.Add(elements.ToList());
-
-                    List<int> tempRowCountVisitedNode = new();
 
                     int j = 0;
                     columns = elements.Length;
@@ -439,7 +532,9 @@ namespace src
 
                     foreach (var element in elements)
                     {
-                        tempRowCountVisitedNode.Add(0);
+                        // 
+                        tempSearchColVisitedNodes.Add(0);
+                        tempFinalColVisitedNodes.Add(0);
 
                         var brdr = new Border()
                         {
@@ -482,7 +577,10 @@ namespace src
                         brdr.Child = lB;
                         stpR.Children.Add(brdr);
                     }
-                    countVisitedNode.Add(tempRowCountVisitedNode);
+                    //
+                    searchCountVisitedNode.Add(tempSearchColVisitedNodes);
+                    finalCountVisitedNode.Add(tempFinalColVisitedNodes);
+
                     i++;
                 }
 
