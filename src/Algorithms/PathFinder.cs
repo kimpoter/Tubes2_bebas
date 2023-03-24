@@ -203,9 +203,33 @@ namespace src
             }
 
             for (int i = 1; i < _trace.Count; i++)
-            { 
-                result.Add("T");
-                result.Add(String.Format("{0},{1}", _trace[i].X, _trace[i].Y));
+            {   
+                if (_trace[i].X == _trace[i - 1].X + 1 && _trace[i].Y == _trace[i - 1].Y)
+                {
+                    result.Add("R");
+                    continue;
+                }
+                else if (_trace[i].X == _trace[i - 1].X - 1 && _trace[i].Y == _trace[i - 1].Y)
+                {
+                    result.Add("L");
+                    continue;
+                }
+                else if (_trace[i].Y == _trace[i - 1].Y - 1 && _trace[i].X == _trace[i - 1].X)
+                {
+                    result.Add("U");
+                    continue;
+                }
+                else if (_trace[i].Y == _trace[i - 1].Y + 1 && _trace[i].X == _trace[i - 1].X)
+                {
+                    result.Add("D");
+                    continue;
+                }
+                else 
+                {
+                    result.Add("T");
+                    result.Add(String.Format("{0},{1}", _trace[i].X, _trace[i].Y));
+                    continue;
+                }
             }
             return result;
         }
